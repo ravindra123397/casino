@@ -7,13 +7,15 @@ import {
     ChevronLeft,
     ChevronRight,
 } from "lucide-react";
+import imagge1 from "../assets/1.png";
+import imagge2 from "../assets/2.png";
+import imagge3 from "../assets/3.png";
+import imagge4 from "../assets/4.png";
+import imagge5 from "../assets/5.png";
+
 
 /* 🔥 Slider Images */
-const slides = [
-    "https://res.cloudinary.com/monotech/image/upload/h_500,c_limit/v1765716601/rajabets/cms/2368c35e-e1ac-4c1a-9340-01115f31c33a.jpg",
-    "https://res.cloudinary.com/monotech/image/upload/h_500,c_limit/v1683995030/rajabets/cms/653b8d05-45ea-4684-a4cc-e41281fb7954.jpg",
-    "https://res.cloudinary.com/monotech/image/upload/h_500,c_limit/v1751625848/rajabets/cms/87d986b3-26d8-4528-a467-6f6ad0872d65.jpg",
-];
+const slides = [imagge1, imagge2, imagge3, imagge4, imagge5];
 
 /* 🔥 Overlay Cards */
 const cards = [

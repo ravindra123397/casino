@@ -1,5 +1,6 @@
 import React from "react";
 import { Apple, Play } from "lucide-react";
+import background from "../assets/Take.gif"
 
 const DownloadAppSection = () => {
   return (
@@ -9,7 +10,9 @@ const DownloadAppSection = () => {
                    bg-gradient-to-r from-[#0b1622] via-[#0b1622] to-[#b8931d]"
       >
         {/* Background texture */}
-        <div className="absolute inset-0 bg-[url('https://miny.live/images/banner/stadiumbg.jpg')] bg-cover bg-center opacity-20" />
+        <div 
+         style={{ backgroundImage: `url(${background})` }}
+        className="absolute inset-0  bg-cover bg-center opacity-20" />
 
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 items-center gap-8 p-8 md:p-12">
 
@@ -58,16 +61,7 @@ const DownloadAppSection = () => {
             </div>
           </div>
 
-          {/* RIGHT IMAGE WITH FLOAT ANIMATION */}
-          <div className="relative flex justify-center md:justify-end">
-            <img
-              src="https://miny.live/images/banner/ctaThumb3_1.png"
-              alt="Rajabets App"
-              className="w-[220px] sm:w-[260px] md:w-[300px]
-                         drop-shadow-2xl
-                         animate-phoneFloat"
-            />
-          </div>
+         
         </div>
       </div>
 

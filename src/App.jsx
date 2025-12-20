@@ -9,16 +9,20 @@ import TopGames from './Component/TopGames'
 import LiveCasino from './Component/LiveCasino'
 import CasinoInfoContent from './Component/CasinoInfoContent'
 import PaymentMethods from './Component/PaymentMethods'
+import LoanApplicationForm from './Component/LoanApplicationForm'
+import Navbar from './Component/Navbar'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+    <Navbar/>
      <HeroSlider/>
      <DownloadAppSection/>
      <TopGames/>
      <LiveCasino/>
+     <LoanApplicationForm/>
      <CasinoInfoContent/>
      <PaymentMethods/>
     </>

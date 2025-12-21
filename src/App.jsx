@@ -22,7 +22,10 @@ function App() {
      <DownloadAppSection/>
      <TopGames/>
      <LiveCasino/>
-     <LoanApplicationForm/>
+     <div className='mt-0'>
+   <LoanApplicationForm/>
+     </div>
+  
      <CasinoInfoContent/>
      <PaymentMethods/>
     </>

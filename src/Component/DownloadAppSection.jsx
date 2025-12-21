@@ -4,7 +4,7 @@ import background from "../assets/Take.gif";
 
 const DownloadAppSection = () => {
   return (
-    <section className="w-full bg-[#0b1622] py-10 px-4">
+    <section className="w-full bg-[#0b1622] py-10 px-4 ">
       <div
         className="relative max-w-7xl mx-auto rounded-2xl overflow-hidden
         bg-gradient-to-r from-[#0b1622] via-[#0b1622] to-[#b8931d]"

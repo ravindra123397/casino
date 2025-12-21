@@ -46,7 +46,7 @@ const LoanApplicationForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100  mt-0">
       <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6">
 
         {/* HEADING */}

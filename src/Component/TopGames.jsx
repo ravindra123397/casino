@@ -85,17 +85,18 @@ const TopGames = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-white text-2xl font-semibold">Top Games</h2>
 
-          
+
         </div>
 
         {/* GAMES GRID */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
           {games.map((game, index) => (
             <div
               key={index}
-              className="relative group rounded-xl overflow-hidden
-                         bg-[#0f1e2e] cursor-pointer
-                         hover:scale-105 transition-transform duration-300"
+              className={`relative group rounded-xl overflow-hidden
+        bg-[#0f1e2e] cursor-pointer
+        hover:scale-105 transition-transform duration-300
+        ${index >= 6 ? "hidden sm:block" : "block"}`}
             >
               {/* Favorite Icon */}
               <button className="absolute top-3 right-3 z-10 text-white/70 hover:text-yellow-400">
@@ -106,24 +107,26 @@ const TopGames = () => {
               <img
                 src={game.image}
                 alt={game.title}
-                className="w-full h-[200px] object-cover"
+                className="w-full h-[140px] sm:h-[200px] object-cover"
               />
 
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition" />
 
               {/* Text */}
-              <div className="absolute bottom-0 w-full p-3 bg-gradient-to-t from-black/80 to-transparent">
-                <h4 className="text-white text-sm font-semibold leading-tight">
+              <div className="absolute bottom-0 w-full p-2 sm:p-3 bg-gradient-to-t from-black/80 to-transparent">
+                <h4 className="text-white text-xs sm:text-sm font-semibold leading-tight">
                   {game.title}
                 </h4>
-                <p className="text-xs text-gray-300 mt-1">
+                <p className="text-[10px] sm:text-xs text-gray-300 mt-0.5">
                   {game.provider}
                 </p>
               </div>
             </div>
           ))}
         </div>
+
+
 
       </div>
     </section>

@@ -15,11 +15,12 @@ const LoanApplicationForm = () => {
     aadhaarBack: null,
     panNumber: "",
     panFile: null,
+    bookType: "", // ✅ STEP 3 FIELD
   });
 
   const otpRefs = useRef([]);
 
-  /* 🔹 OTP HANDLER */
+  /* ================= OTP HANDLER ================= */
   const handleOtpChange = (value, index) => {
     if (!/^\d?$/.test(value)) return;
     const otp = [...formData.otp];
@@ -29,7 +30,7 @@ const LoanApplicationForm = () => {
     if (value && index < 3) otpRefs.current[index + 1].focus();
   };
 
-  /* 🔹 SEND OTP */
+  /* ================= SEND OTP ================= */
   const sendOtp = () => {
     if (formData.phone.length !== 10) {
       alert("Please enter valid phone number");
@@ -37,7 +38,6 @@ const LoanApplicationForm = () => {
     }
 
     setSendingOtp(true);
-
     setTimeout(() => {
       setSendingOtp(false);
       setOtpSent(true);
@@ -45,8 +45,14 @@ const LoanApplicationForm = () => {
     }, 1500);
   };
 
+  /* ================= SUBMIT ================= */
+  const handleSubmit = () => {
+    console.log("FINAL FORM DATA:", formData);
+    alert("Loan Application Submitted Successfully");
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100  mt-0">
+    <div className="flex items-center justify-center bg-white mt-5 mb-5">
       <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6">
 
         {/* HEADING */}
@@ -54,14 +60,12 @@ const LoanApplicationForm = () => {
           Loan Application
         </h2>
         <p className="text-sm text-gray-500 text-center mb-6">
-          Step {step} of 2
+          Step {step} of 3
         </p>
 
         {/* ================= STEP 1 ================= */}
         {step === 1 && (
           <div className="space-y-4">
-
-            {/* FIRST NAME */}
             <div>
               <label className="text-sm font-medium text-gray-600">
                 First Name
@@ -76,7 +80,6 @@ const LoanApplicationForm = () => {
               />
             </div>
 
-            {/* LAST NAME */}
             <div>
               <label className="text-sm font-medium text-gray-600">
                 Last Name
@@ -91,7 +94,6 @@ const LoanApplicationForm = () => {
               />
             </div>
 
-            {/* PHONE + SEND OTP */}
             <div>
               <label className="text-sm font-medium text-gray-600">
                 Phone Number
@@ -122,7 +124,6 @@ const LoanApplicationForm = () => {
               </div>
             </div>
 
-            {/* OTP */}
             {otpSent && (
               <div>
                 <label className="text-sm font-medium text-gray-600 block mb-2">
@@ -155,11 +156,9 @@ const LoanApplicationForm = () => {
           </div>
         )}
 
-        {/* STEP 2 (UNCHANGED) */}
-       {step === 2 && (
+        {/* ================= STEP 2 ================= */}
+        {step === 2 && (
           <div className="space-y-5">
-
-            {/* LOAN AMOUNT */}
             <div>
               <label className="text-sm font-medium text-gray-600">
                 Select Loan Amount
@@ -174,13 +173,12 @@ const LoanApplicationForm = () => {
                 step="1000"
                 value={formData.amount}
                 onChange={(e) =>
-                  setFormData({ ...formData, amount: e.target.value })
+                  setFormData({ ...formData, amount: Number(e.target.value) })
                 }
                 className="w-full"
               />
             </div>
 
-            {/* AADHAAR FRONT */}
             <div>
               <label className="text-sm font-medium text-gray-600">
                 Aadhaar Card (Front)
@@ -188,14 +186,13 @@ const LoanApplicationForm = () => {
               <input
                 type="file"
                 accept="image/*"
+                className="file-input"
                 onChange={(e) =>
                   setFormData({ ...formData, aadhaarFront: e.target.files[0] })
                 }
-                className="file-input"
               />
             </div>
 
-            {/* AADHAAR BACK */}
             <div>
               <label className="text-sm font-medium text-gray-600">
                 Aadhaar Card (Back)
@@ -203,29 +200,27 @@ const LoanApplicationForm = () => {
               <input
                 type="file"
                 accept="image/*"
+                className="file-input"
                 onChange={(e) =>
                   setFormData({ ...formData, aadhaarBack: e.target.files[0] })
                 }
-                className="file-input"
               />
             </div>
 
-            {/* PAN NUMBER */}
             <div>
               <label className="text-sm font-medium text-gray-600">
                 PAN Card Number
               </label>
               <input
                 type="text"
-                placeholder="ABCDE1234F"
                 className="input uppercase"
+                placeholder="ABCDE1234F"
                 onChange={(e) =>
                   setFormData({ ...formData, panNumber: e.target.value })
                 }
               />
             </div>
 
-            {/* PAN FILE */}
             <div>
               <label className="text-sm font-medium text-gray-600">
                 PAN Card Upload
@@ -233,14 +228,13 @@ const LoanApplicationForm = () => {
               <input
                 type="file"
                 accept="image/*"
+                className="file-input"
                 onChange={(e) =>
                   setFormData({ ...formData, panFile: e.target.files[0] })
                 }
-                className="file-input"
               />
             </div>
 
-            {/* BUTTONS */}
             <div className="flex gap-3 pt-2">
               <button
                 onClick={() => setStep(1)}
@@ -248,7 +242,52 @@ const LoanApplicationForm = () => {
               >
                 Previous
               </button>
-              <button className="w-1/2 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+              <button
+                onClick={() => setStep(3)}
+                className="w-1/2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ================= STEP 3 ================= */}
+        {step === 3 && (
+          <div className="space-y-5">
+            <div>
+              <label className="text-sm font-medium text-gray-600">
+                Which book do you like
+              </label>
+              <select
+                className="input"
+                value={formData.bookType}
+                onChange={(e) =>
+                  setFormData({ ...formData, bookType: e.target.value })
+                }
+              >
+                <option value="">Select book</option>
+                <option value="Demand 999">Demand 999</option>
+                <option value="King Exchange All Panel">
+                  King Exchange All Panel
+                </option>
+                <option value="Mahakar Book">Mahakar Book</option>
+              </select>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={() => setStep(2)}
+                className="w-1/2 border py-2 rounded-lg"
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={!formData.bookType}
+                className="w-1/2 bg-green-600 text-white py-2 rounded-lg
+                           hover:bg-green-700 disabled:opacity-50"
+              >
                 Submit
               </button>
             </div>
@@ -277,8 +316,6 @@ const LoanApplicationForm = () => {
         `}
       </style>
     </div>
-
-      
   );
 };
 

@@ -1,8 +1,10 @@
 import React from "react";
+import PaymentMethods from "./PaymentMethods";
 
 const CasinoInfoContent = () => {
   return (
-    <section className="w-full bg-gradient-to-b from-[#08131e] to-[#02080f] px-4 py-14">
+    <>
+      <section className="w-full bg-gradient-to-b from-[#08131e] to-[#02080f] px-4 py-14">
 
       {/* MAIN CONTENT */}
       <div className="max-w-7xl mx-auto text-gray-300 text-base md:text-lg leading-7 md:leading-8">
@@ -86,7 +88,7 @@ const CasinoInfoContent = () => {
         {[
           {
             q: "How to start online betting in India?",
-            a: "Starting online betting in India is simple with Rajabets. Create an account, make your first deposit, and claim your 200% welcome bonus. Choose casino or sports bonus and start betting instantly.",
+            a: "Starting online betting in India is simple with Sanwariya Seth Book. Create an account, make your first deposit, and claim your 200% welcome bonus. Choose casino or sports bonus and start betting instantly.",
           },
           {
             q: "How to Deposit & Withdraw Money in Online Betting?",
@@ -94,19 +96,19 @@ const CasinoInfoContent = () => {
           },
           {
             q: "Are online betting sites legal in India?",
-            a: "Online betting legality varies by state. Rajabets operates under international licenses and follows strict compliance standards.",
+            a: "Online betting legality varies by state. Sanwariya Seth Book operates under international licenses and follows strict compliance standards.",
           },
           {
             q: "Which is the best online betting site in India?",
-            a: "Rajabets offers 200% bonuses, instant cashback up to 25%, free spins, and a strong focus on Indian sports like cricket and kabaddi.",
+            a: "Sanwariya Seth Book offers 200% bonuses, instant cashback up to 25%, free spins, and a strong focus on Indian sports like cricket and kabaddi.",
           },
           {
-            q: "What types of casino games can I play at Rajabets?",
+            q: "What types of casino games can I play at Sanwariya Seth Book?",
             a: "You can play slots, live dealer games, table games, Teen Patti, Andar Bahar, and crash games like Aviator.",
           },
           {
-            q: "Is mobile betting available at Rajabets?",
-            a: "Yes, Rajabets works perfectly on Android and iOS through mobile browsers without downloading any app.",
+            q: "Is mobile betting available at Sanwariya Seth Book?",
+            a: "Yes, Sanwariya Seth Book works perfectly on Android and iOS through mobile browsers without downloading any app.",
           },
         ].map((item, i) => (
           <div key={i} className="mb-8">
@@ -122,11 +124,16 @@ const CasinoInfoContent = () => {
         </h2>
 
         <p>
-       To win online betting games and events, do not allow your emotions to get in the way. Play with expansive knowledge and place your money on bets you are considerably sure to win. Rajabets stands as your premier destination for online casino games and sports betting in India. With our extensive game selection, generous bonuses, and dedication to the Indian market, we provide a complete gaming experience tailored to Indian players. Whether you're interested in casino games, sports betting, or both, our platform offers everything you need for an exciting and rewarding online gaming experience. Join us today and discover why thousands of Indian players choose Rajabets as their preferred online gaming destination.
+       To win online betting games and events, do not allow your emotions to get in the way. Play with expansive knowledge and place your money on bets you are considerably sure to win. Sanwariya Seth Book stands as your premier destination for online casino games and sports betting in India. With our extensive game selection, generous bonuses, and dedication to the Indian market, we provide a complete gaming experience tailored to Indian players. Whether you're interested in casino games, sports betting, or both, our platform offers everything you need for an exciting and rewarding online gaming experience. Join us today and discover why thousands of Indian players choose Sanwariya Seth Book as their preferred online gaming destination.
         </p>
 
       </div>
+
+<PaymentMethods />
     </section>
+    
+    </>
+  
   );
 };
 

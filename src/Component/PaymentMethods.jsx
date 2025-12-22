@@ -11,7 +11,7 @@ const payments = [
   { name: "PhonePe", logo: "https://res.cloudinary.com/monotech/image/upload/w_100/v1645460247/rajabets/cms/e2c4426b-7acc-4336-968c-b926c34c1180.png" },
   { name: "Google Pay", logo: "https://res.cloudinary.com/monotech/image/upload/w_100/v1696350693/rajabets/cms/9a4f7e2b-162a-424c-b673-aa4aa5a3f7d8.png" },
   { name: "Mastercard", logo: "https://res.cloudinary.com/monotech/image/upload/w_100/v1613818564/betibu/27c36b38-bf0f-42fa-a60f-f30fc6d86c4f.svg" },
-];
+]; 
 
 const PaymentMethods = () => {
   const sliderRef = useRef(null);
@@ -45,8 +45,8 @@ const PaymentMethods = () => {
     (intervalRef.current = setInterval(scrollRight, 2500));
 
   return (
-    <section className="w-full bg-[#08131e] py-6 px-4">
-      <div className="max-w-7xl mx-auto relative">
+    <section className="w-full   ">
+      <div className=" relative">
 
         {/* LEFT ARROW */}
         <button
@@ -65,14 +65,14 @@ const PaymentMethods = () => {
           onMouseEnter={pause}
           onMouseLeave={resume}
           className="flex gap-6 overflow-x-auto scrollbar-hide
-                     bg-[#0f1e2e] rounded-xl px-12 py-4 scroll-smooth"
+                      rounded-xl px-12 py-4 scroll-smooth"
         >
           {[...payments, ...payments].map((item, index) => (
             <div
               key={index}
               className="min-w-[120px] h-[48px]
                          flex items-center justify-center
-                         bg-[#102435] rounded-lg
+                          rounded-lg
                          hover:bg-[#162f46] transition"
             >
               <img

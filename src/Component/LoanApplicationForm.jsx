@@ -16,7 +16,7 @@ const LoanApplicationForm = () => {
     lastName: "",
     phone: "",
     otp: ["", "", "", ""],
-    amount: 500000,
+    amount: 50000,
     aadhaarFront: null,
     aadhaarBack: null,
     panNumber: "",

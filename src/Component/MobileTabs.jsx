@@ -48,7 +48,7 @@ const MobileTabs = () => {
                 flex items-center justify-center
                 h-12 rounded-lg
                 bg-[#12263d]
-                text-yellow-400
+                text-red-600
                 hover:bg-[#1a3555]
               "
             >
@@ -66,7 +66,7 @@ const MobileTabs = () => {
             <button
               key={index}
               onClick={() => handleScroll(tab.target)}
-              className="flex items-center justify-center w-full h-full text-yellow-400"
+              className="flex items-center justify-center w-full h-full text-red-600"
             >
               {React.cloneElement(tab.icon, { size: 22 })}
             </button>
@@ -75,7 +75,7 @@ const MobileTabs = () => {
           {/* MENU BUTTON */}
           <button
             onClick={() => setOpenMenu(!openMenu)}
-            className="flex items-center justify-center w-full h-full text-yellow-400"
+            className="flex items-center justify-center w-full h-full text-red-600"
           >
             <Menu size={24} />
           </button>

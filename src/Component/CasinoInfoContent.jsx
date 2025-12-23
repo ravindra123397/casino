@@ -9,7 +9,7 @@ const CasinoInfoContent = () => {
       {/* MAIN CONTENT */}
       <div className="max-w-7xl mx-auto text-gray-300 text-base md:text-lg leading-7 md:leading-8">
 
-        <h1 className="text-yellow-400 text-2xl md:text-3xl font-semibold mb-6">
+        <h1 className="text-red-600 text-2xl md:text-3xl font-semibold mb-6">
           Online casino games in India
         </h1>
 
@@ -20,30 +20,30 @@ const CasinoInfoContent = () => {
           with fast deposits, secure withdrawals, and 24/7 support.
         </p>
 
-        <h2 className="text-yellow-400 text-xl md:text-2xl font-semibold mt-10 mb-4">
+        <h2 className="text-red-600 text-xl md:text-2xl font-semibold mt-10 mb-4">
           Latest Casino and Sports Promotions
         </h2>
 
         <ul className="list-disc pl-6 space-y-3">
           <li>
-            <span className="text-yellow-400 font-semibold">Welcome Bonus:</span>{" "}
+            <span className="text-red-600 font-semibold">Welcome Bonus:</span>{" "}
             Get attractive signup bonuses on your first deposit.
           </li>
           <li>
-            <span className="text-yellow-400 font-semibold">Instant Cashback Rewards:</span>{" "}
+            <span className="text-red-600 font-semibold">Instant Cashback Rewards:</span>{" "}
             Enjoy cashback offers on casino and sports bets.
           </li>
           <li>
-            <span className="text-yellow-400 font-semibold">Every Deposit Free Spins:</span>{" "}
+            <span className="text-red-600 font-semibold">Every Deposit Free Spins:</span>{" "}
             Free spins available on selected slot games.
           </li>
           <li>
-            <span className="text-yellow-400 font-semibold">Special Gaming Events:</span>{" "}
+            <span className="text-red-600 font-semibold">Special Gaming Events:</span>{" "}
             Participate in tournaments and seasonal events.
           </li>
         </ul>
 
-        <h2 className="text-yellow-400 text-xl md:text-2xl font-semibold mt-10 mb-4">
+        <h2 className="text-red-600 text-xl md:text-2xl font-semibold mt-10 mb-4">
           Live Casino Games
         </h2>
 
@@ -55,7 +55,7 @@ const CasinoInfoContent = () => {
           <li>Andar Bahar</li>
         </ul>
 
-        <h2 className="text-yellow-400 text-xl md:text-2xl font-semibold mt-10 mb-4">
+        <h2 className="text-red-600 text-xl md:text-2xl font-semibold mt-10 mb-4">
           Sports Betting in India
         </h2>
 
@@ -81,7 +81,7 @@ const CasinoInfoContent = () => {
       {/* FAQ SECTION */}
       <div className="max-w-7xl mx-auto mt-16 text-gray-300 text-base md:text-lg leading-7 md:leading-8">
 
-        <h2 className="text-yellow-400 text-2xl md:text-3xl font-semibold mb-8">
+        <h2 className="text-red-600 text-2xl md:text-3xl font-semibold mb-8">
           Frequently Asked Questions
         </h2>
 
@@ -112,14 +112,14 @@ const CasinoInfoContent = () => {
           },
         ].map((item, i) => (
           <div key={i} className="mb-8">
-            <h3 className="text-yellow-400 text-lg md:text-xl font-semibold mb-2">
+            <h3 className="text-red-600 text-lg md:text-xl font-semibold mb-2">
               {item.q}
             </h3>
             <p>{item.a}</p>
           </div>
         ))}
 
-        <h2 className="text-yellow-400 text-2xl md:text-3xl font-semibold mt-12 mb-4">
+        <h2 className="text-red-600 text-2xl md:text-3xl font-semibold mt-12 mb-4">
           Final Words
         </h2>
 

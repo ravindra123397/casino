@@ -1,5 +1,5 @@
 import React from "react";
-import background from "../assets/Take.gif";
+import background from "../assets/logo5.png";
 
 const DownloadAppSection = () => {
   return (

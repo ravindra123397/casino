@@ -63,7 +63,7 @@
 //         <div className="hidden sm:flex absolute bottom-24 right-6 z-30 items-center gap-3">
 //           <button
 //             onClick={prevSlide}
-//             className="p-2 rounded-full bg-black/40 text-white hover:text-yellow-400"
+//             className="p-2 rounded-full bg-black/40 text-white hover:text-red-600"
 //           >
 //             <ChevronLeft size={22} />
 //           </button>
@@ -84,7 +84,7 @@
 
 //           <button
 //             onClick={nextSlide}
-//             className="p-2 rounded-full bg-black/40 text-white hover:text-yellow-400"
+//             className="p-2 rounded-full bg-black/40 text-white hover:text-red-600"
 //           >
 //             <ChevronRight size={22} />
 //           </button>
@@ -129,7 +129,7 @@
 //                 >
 //                   {React.cloneElement(item.icon, {
 //                     size: 16,
-//                     className: "text-yellow-400",
+//                     className: "text-red-600",
 //                   })}
 //                 </div>
 
@@ -139,7 +139,7 @@
 //                     {item.title}
 //                   </h4>
 //                   {item.action && (
-//                     <p className="text-yellow-400 text-[9px] sm:text-sm">
+//                     <p className="text-red-600 text-[9px] sm:text-sm">
 //                       {item.action}
 //                     </p>
 //                   )}
@@ -168,13 +168,13 @@ import {
 } from "lucide-react";
 
 /* Slider Images */
-import imagge1 from "../assets/1.png";
+import imagge1 from "../assets/logo7.png";
 import imagge2 from "../assets/2.png";
 import imagge3 from "../assets/3.png";
 import imagge4 from "../assets/4.png";
 import imagge5 from "../assets/5.png";
 
-const slides = [imagge1, imagge2, imagge3, imagge4, imagge5];
+const slides = [imagge1];
 
 /* Overlay Cards */
 const cards = [
@@ -222,7 +222,7 @@ const HeroSlider = () => {
         <div className="hidden sm:flex absolute bottom-28 right-6 z-30 items-center gap-3">
           <button
             onClick={prevSlide}
-            className="p-2 rounded-full bg-black/40 text-white hover:text-yellow-400"
+            className="p-2 rounded-full bg-black/40 text-white hover:text-red-600"
           >
             <ChevronLeft size={22} />
           </button>
@@ -243,7 +243,7 @@ const HeroSlider = () => {
 
           <button
             onClick={nextSlide}
-            className="p-2 rounded-full bg-black/40 text-white hover:text-yellow-400"
+            className="p-2 rounded-full bg-black/40 text-white hover:text-red-600"
           >
             <ChevronRight size={22} />
           </button>
@@ -251,7 +251,7 @@ const HeroSlider = () => {
       </div>
 
       {/* ================= OVERLAY CARDS ================= */}
-      <div className="absolute left-0 w-full z-40 -translate-y-16 sm:-translate-y-24">
+      <div className="absolute left-0 w-full z-40 -translate-y-4 sm:-translate-y-24">
         <div className="max-w-7xl mx-auto px-3">
 
           {/* MOBILE → SCROLL | DESKTOP → IMAGE STYLE GRID */}
@@ -293,7 +293,7 @@ const HeroSlider = () => {
                 >
                   {React.cloneElement(item.icon, {
                     size: 16,
-                    className: "text-yellow-400 sm:size-[26px]",
+                    className: "text-red-600 sm:size-[26px]",
                   })}
                 </div>
 
@@ -302,7 +302,7 @@ const HeroSlider = () => {
                   <h4 className="text-white text-[11px] sm:text-lg font-semibold">
                     {item.title}
                   </h4>
-                  <p className="text-yellow-400 text-[9px] sm:text-sm mt-0.5">
+                  <p className="text-red-600 text-[9px] sm:text-sm mt-0.5">
                     {item.action} →
                   </p>
                 </div>

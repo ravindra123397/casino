@@ -1,12 +1,12 @@
 import React from "react";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
-
+import image1 from "../assets/logo3.png"
 const games = [
   {
-    title: "CHICKEN ROAD 2",
-    provider: "INOUT",
+    // title: "CHICKEN ROAD 2",
+    // provider: "INOUT",
     image:
-      "https://res.cloudinary.com/monotech/image/upload/w_400/v1760516503/rajabets/game/37310057-7dee-459b-bbc9-fa2c88b7ecf4.jpg",
+      image1,
   },
   {
     title: "AVIATOR",
@@ -83,13 +83,13 @@ const TopGames = () => {
 
         {/* HEADER */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-white text-2xl font-semibold">Top Games</h2>
+          <h2 className="text-white text-2xl font-semibold">Play Casino on Crebit</h2>
 
 
         </div>
 
         {/* GAMES GRID */}
-        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
           {games.map((game, index) => (
             <div
               key={index}
@@ -99,7 +99,7 @@ const TopGames = () => {
         ${index >= 6 ? "hidden sm:block" : "block"}`}
             >
               {/* Favorite Icon */}
-              <button className="absolute top-3 right-3 z-10 text-white/70 hover:text-yellow-400">
+              <button className="absolute top-3 right-3 z-10 text-white/70 hover:text-red-600">
                 <Heart size={18} />
               </button>
 

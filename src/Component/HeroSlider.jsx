@@ -1,37 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Swords,
+  Trophy,
+  Dice5,
+  Club,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
-/* ================= SLIDER IMAGES ================= */
+/* Slider Images */
 import image1 from "../assets/mahakal1.png";
 import image2 from "../assets/mahaka2.png";
 import image3 from "../assets/mahaka3.png";
 import image4 from "../assets/mahaka4.png";
 import image5 from "../assets/mahakal5.png";
 
-/* ================= CARD IMAGES ================= */
-import card1 from "../assets/mahakal1.png";
-import card2 from "../assets/mahaka2.png";
-import card3 from "../assets/mahaka3.png";
-import card4 from "../assets/mahaka4.png";
-import card5 from "../assets/mahakal5.png";
 const slides = [image1, image2, image3, image4, image5];
 
+/* Overlay Cards */
 const cards = [
-  { image: card1 },
-  { image: card2 },
-  { image: card3 },
-  { image: card4 },
-  { image: card5 },
+  { title: "Cricket Bets", action: "Show Bets", icon: <Swords /> },
+  { title: "Sport Bets", action: "Show Bets", icon: <Trophy /> },
+  { title: "Casino", action: "Show Games", icon: <Dice5 /> },
+  { title: "Live Casino", action: "All Live Games", icon: <Club /> },
 ];
 
 const HeroSlider = () => {
   const [current, setCurrent] = useState(0);
 
-  /* 🔁 AUTO SLIDE */
+  /* 🔁 Auto Slide */
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 4000);
+
     return () => clearInterval(timer);
   }, []);
 
@@ -56,14 +58,13 @@ const HeroSlider = () => {
           />
         ))}
 
-        {/* DARK GRADIENT */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/10" />
+        <div className="" />
 
         {/* DESKTOP CONTROLS */}
         <div className="hidden sm:flex absolute bottom-28 right-6 z-30 items-center gap-3">
           <button
             onClick={prevSlide}
-            className="p-2 rounded-full bg-black/40 text-white hover:text-red-500"
+            className="p-2 rounded-full bg-black/40 text-white hover:text-red-600"
           >
             <ChevronLeft size={22} />
           </button>
@@ -84,48 +85,42 @@ const HeroSlider = () => {
 
           <button
             onClick={nextSlide}
-            className="p-2 rounded-full bg-black/40 text-white hover:text-red-500"
+            className="p-2 rounded-full bg-black/40 text-white hover:text-red-600"
           >
             <ChevronRight size={22} />
           </button>
         </div>
       </div>
 
-      {/* ================= IMAGE CARDS ================= */}
-      <div className="absolute left-0 w-full z-40 -translate-y-4 sm:-translate-y-24">
+      {/* ================= OVERLAY CARDS ================= */}
+      <div className="absolute left-0 w-full z-40 -translate-y-6 sm:-translate-y-24">
         <div className="max-w-7xl mx-auto px-3">
-
-          <div
-            className="
-              flex gap-3 overflow-x-auto pb-2
-              sm:grid sm:grid-cols-4 sm:gap-6 sm:overflow-visible
-              scrollbar-hide
-            "
-          >
+          <div className="flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-4 sm:gap-6 sm:overflow-visible scrollbar-hide">
             {cards.map((item, index) => (
               <div
                 key={index}
-                className="
-                  min-w-[120px]
-                  sm:min-w-0
-                  rounded-xl
-                  overflow-hidden
-                  shadow-xl
-                  bg-[#0b1a2a]
-                  hover:scale-105
-                  transition-all duration-300
-                  cursor-pointer
-                "
+                className="min-w-[110px] sm:min-w-0 bg-gradient-to-b from-[#0f2238] to-[#0b1a2a] rounded-xl flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-4 py-2 px-2 sm:py-6 sm:px-6 shadow-xl hover:bg-[#0e2238] transition-all duration-300"
               >
-                <img
-                  src={item.image}
-                  alt="Card"
-                  className="w-full h-[90px] sm:h-[160px] object-cover"
-                />
+                {/* Icon */}
+                <div className="w-8 h-8 sm:w-14 sm:h-14 flex items-center justify-center rounded-lg bg-[#12263d]">
+                  {React.cloneElement(item.icon, {
+                    size: 16,
+                    className: "text-red-600 sm:size-[26px]",
+                  })}
+                </div>
+
+                {/* Text */}
+                <div className="text-center sm:text-left leading-tight">
+                  <h4 className="text-white text-[11px] sm:text-lg font-semibold">
+                    {item.title}
+                  </h4>
+                  <p className="text-red-600 text-[9px] sm:text-sm mt-0.5">
+                    {item.action} →
+                  </p>
+                </div>
               </div>
             ))}
           </div>
-
         </div>
       </div>
     </section>

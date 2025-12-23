@@ -112,7 +112,7 @@ const LoanApplicationForm = () => {
 const Header = () => (
   <div className="px-5 pt-5 ">
     <h2 className="text-lg font-semibold text-gray-700">Welcome!</h2>
-    <h1 className="text-xl font-bold text-gray-900">Money Keeper</h1>
+    <h1 className="text-xl font-bold text-gray-900">Sawariya Seth </h1>
   </div>
 );
 

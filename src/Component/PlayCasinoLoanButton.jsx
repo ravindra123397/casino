@@ -2,7 +2,7 @@ import React from "react";
 
 const PlayCasinoLoanButton = ({ onClick }) => {
   return (
-    <div className="md:hidden flex justify-center bg-black ">
+    <div className="md:hidden flex justify-center  ">
       <button
         onClick={onClick}
         className="

@@ -25,7 +25,7 @@ const games = [
 
 const TopGames = () => {
   return (
-    <section className="w-full bg-black -mt-12 px-4">
+    <section className="w-full bg-[#0b1622] -mt-12 px-4">
       <div className="max-w-7xl mx-auto">
 
         {/* HEADER */}

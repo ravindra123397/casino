@@ -53,7 +53,7 @@ const PaymentMethods = () => {
     (intervalRef.current = setInterval(scrollRight, 2500));
 
   return (
-    <section className="w-full  bg-black mt-7 ">
+    <section className="w-full  bg-black  ">
       <div className=" relative">
 
         {/* LEFT ARROW */}

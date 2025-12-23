@@ -60,13 +60,13 @@ const LiveCasinoSlider = () => {
     (intervalRef.current = setInterval(scrollRight, 3000));
 
   return (
-    <section className="w-full bg-[#08131e] py-10 px-4">
+    <section className="w-full bg-[#08131e] py-5 px-4">
       <div
         className={`mx-auto transition-all duration-700 ease-in-out
           ${isHovering ? "max-w-full" : "max-w-7xl"}`}
       >
         {/* HEADER */}
-        <div className="flex items-center justify-between mb-6 px-2">
+        <div className="flex items-center justify-between  px-2">
           <h2 className="text-white text-2xl font-semibold uppercase">
             Live Casino
           </h2>

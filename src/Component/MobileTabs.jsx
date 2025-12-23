@@ -1,68 +1,116 @@
 import React, { useState } from "react";
-import { Swords, Club, Menu, FileText, Wallet, Clock } from "lucide-react";
+import {
+  Home,
+  Repeat,
+  Wallet,
+  User,
+  FileText,
+  Clock,
+  CreditCard,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const mainTabs = [
-  { icon: <Swords />, target: "cricket" },
-  { icon: <Club />, target: "live-casino" },
+const bottomTabs = [
+  { icon: <Home />, target: "home" },
+  { icon: <Repeat />, target: "exchange" },
+  { icon: <Wallet />, target: "loan" },
 ];
 
-const menuTabs = [
-  { icon: <FileText />, target: "complete-form" },
-  { icon: <Wallet />, target: "loan-disbursed" },
-  { icon: <Wallet />, target: "processing-fees" },
-  { icon: <Clock />, target: "wait-24-hours" },
+const userMenuTabs = [
+  {
+    icon: <FileText />,
+    label: "Complete Form",
+    route: "/complete-form", // 🔥 ROUTE
+  },
+  {
+    icon: <CreditCard />,
+    label: "Loan Disbursed",
+    target: "loan-disbursed",
+  },
+  {
+    icon: <Wallet />,
+    label: "Processing Fees",
+    target: "processing-fees",
+  },
+  {
+    icon: <Clock />,
+    label: "Wait 24 Hours",
+    target: "wait-24-hours",
+  },
 ];
 
 const MobileTabs = () => {
-  const [openMenu, setOpenMenu] = useState(false);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
+  const navigate = useNavigate();
 
   const handleScroll = (id) => {
-    setOpenMenu(false);
+    setOpenUserMenu(false);
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
+  const handleUserAction = (item) => {
+    setOpenUserMenu(false);
+
+    // 👉 Route redirect
+    if (item.route) {
+      navigate(item.route);
+      return;
+    }
+
+    // 👉 Same page scroll
+    if (item.target) {
+      handleScroll(item.target);
+    }
+  };
+
   return (
     <>
-      {/* MENU OVERLAY */}
-      {openMenu && (
-        <div className="fixed inset-0 bg-black/50 z-40 sm:hidden" onClick={() => setOpenMenu(false)} />
+      {/* OVERLAY */}
+      {openUserMenu && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 sm:hidden"
+          onClick={() => setOpenUserMenu(false)}
+        />
       )}
 
-      {/* MENU DRAWER */}
+      {/* USER DROPDOWN */}
       <div
         className={`
-          fixed bottom-14 left-0 w-full bg-[#0b1a2a] z-50 sm:hidden
-          transition-transform duration-300
-          ${openMenu ? "translate-y-0" : "translate-y-full"}
+          fixed bottom-14 right-3 w-56
+          bg-[#0b1a2a] rounded-xl z-50 sm:hidden
+          shadow-xl transition-all duration-300
+          ${
+            openUserMenu
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-4 pointer-events-none"
+          }
         `}
       >
-        <div className="grid grid-cols-4 gap-4 p-4">
-          {menuTabs.map((item, i) => (
-            <button
-              key={i}
-              onClick={() => handleScroll(item.target)}
-              className="
-                flex items-center justify-center
-                h-12 rounded-lg
-                bg-[#12263d]
-                text-red-600
-                hover:bg-[#1a3555]
-              "
-            >
-              {React.cloneElement(item.icon, { size: 22 })}
-            </button>
-          ))}
-        </div>
+        {userMenuTabs.map((item, i) => (
+          <button
+            key={i}
+            onClick={() => handleUserAction(item)}
+            className="
+              w-full flex items-center gap-3 px-4 py-3
+              text-sm text-white
+              hover:bg-[#12263d]
+              first:rounded-t-xl last:rounded-b-xl
+            "
+          >
+            {React.cloneElement(item.icon, { size: 18 })}
+            {item.label}
+          </button>
+        ))}
       </div>
 
       {/* BOTTOM TABS */}
       <div className="fixed bottom-0 left-0 w-full bg-[#0b1a2a] z-50 sm:hidden">
         <div className="flex justify-around items-center h-14">
 
-          {mainTabs.map((tab, index) => (
+          {bottomTabs.map((tab, index) => (
             <button
               key={index}
               onClick={() => handleScroll(tab.target)}
@@ -72,12 +120,14 @@ const MobileTabs = () => {
             </button>
           ))}
 
-          {/* MENU BUTTON */}
+          {/* USER */}
           <button
-            onClick={() => setOpenMenu(!openMenu)}
-            className="flex items-center justify-center w-full h-full text-red-600"
+            onClick={() => setOpenUserMenu(!openUserMenu)}
+            className={`flex items-center justify-center w-full h-full
+              ${openUserMenu ? "text-white" : "text-red-600"}
+            `}
           >
-            <Menu size={24} />
+            <User size={22} />
           </button>
 
         </div>

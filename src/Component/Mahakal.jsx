@@ -1,9 +1,10 @@
 import React from "react";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
-import image1 from "../assets/TopGames1.png"
-import image2 from "../assets/TopGames2.png"
-import image3 from "../assets/TopGames3.png"
-import image4 from "../assets/TopGames4.png"
+import image1 from "../assets/mahakal1.png"
+import image2 from "../assets/mahaka2.png"
+import image3 from "../assets/mahaka3.png"
+import image4 from "../assets/mahaka4.png"
+import image5 from "../assets/mahakal5.png"
 const games = [
   {
     image: image1,
@@ -20,17 +21,23 @@ const games = [
 
     image: image4,
   },
+ 
+   {
+
+    image: image5,
+  },
 
 ];
 
-const TopGames = () => {
-  return (
-    <section className="w-full bg-[#08131e] py-10 px-4">
+const Mahakal = () => {
+   
+    return (
+        <section className="w-full bg-[#08131e] py-10 px-4">
       <div className="max-w-7xl mx-auto">
 
         {/* HEADER */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-white text-2xl font-semibold">Play Casino on Crebit</h2>
+          <h2 className="text-white text-2xl font-semibold">Maha Season of Cricket</h2>
 
 
         </div>
@@ -68,7 +75,7 @@ const TopGames = () => {
 
       </div>
     </section>
-  );
-};
+    )
+}
 
-export default TopGames;
+export default Mahakal

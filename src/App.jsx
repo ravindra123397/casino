@@ -1,53 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import LoanApplicationfrom from "./Component/LoanApplicationForm"
+import HomePage from "./page/HomePage";
 import "./App.css";
-
-import Navbar from "./Component/Navbar";
-import HeroSlider from "./Component/HeroSlider";
-import DownloadAppSection from "./Component/DownloadAppSection";
-import TopGames from "./Component/TopGames";
-import LiveCasino from "./Component/LiveCasino";
-import LoanApplicationForm from "./Component/LoanApplicationForm";
-import CasinoInfoContent from "./Component/CasinoInfoContent";
-import PaymentMethods from "./Component/PaymentMethods";
-import MobileTabs from "./Component/MobileTabs";
-
 function App() {
   return (
-    <>
-      <Navbar />
+    <Routes>
+      {/* HOME PAGE */}
+      <Route path="/" element={<HomePage />} />
 
-      {/* TAB: Cricket */}
-      <section id="cricket">
-        <HeroSlider />
-           {/* TAB: Wait of 24 Hours */}
-      <section id="wait-24-hours">
-        <DownloadAppSection />
-      </section>
-        <TopGames />
-      </section>
-
-      {/* TAB: Live Casino */}
-      <section id="live-casino">
-        <LiveCasino />
-      </section>
-
-      {/* TAB: Complete Form */}
-      <section id="complete-form">
-        <LoanApplicationForm />
-      </section>
-
-      {/* TAB: Loan Disbursed */}
-      <section id="loan-disbursed">
-        <CasinoInfoContent />
-       
-      </section>
-
-
-   
-
-      {/* MOBILE ONLY TABS */}
-      <MobileTabs />
-    </>
+      {/* COMPLETE FORM PAGE */}
+      <Route path="/complete-form" element={<LoanApplicationfrom  />} />
+    </Routes>
   );
 }
 

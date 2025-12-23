@@ -129,7 +129,7 @@ const CasinoInfoContent = () => {
 
       </div>
 
-<PaymentMethods />
+
     </section>
     
     </>

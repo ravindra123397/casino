@@ -1,322 +1,419 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
+/* ===================== MAIN COMPONENT ===================== */
 const LoanApplicationForm = () => {
   const [step, setStep] = useState(1);
   const [otpSent, setOtpSent] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
+
+
+
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     phone: "",
     otp: ["", "", "", ""],
-    amount: 10000,
+    amount: 500000,
     aadhaarFront: null,
     aadhaarBack: null,
     panNumber: "",
     panFile: null,
-    bookType: "", // ✅ STEP 3 FIELD
+    bookType: "",
   });
 
   const otpRefs = useRef([]);
 
-  /* ================= OTP HANDLER ================= */
+  /* OTP HANDLER */
   const handleOtpChange = (value, index) => {
     if (!/^\d?$/.test(value)) return;
     const otp = [...formData.otp];
     otp[index] = value;
     setFormData({ ...formData, otp });
-
-    if (value && index < 3) otpRefs.current[index + 1].focus();
+    if (value && index < 3) otpRefs.current[index + 1]?.focus();
   };
 
-  /* ================= SEND OTP ================= */
   const sendOtp = () => {
     if (formData.phone.length !== 10) {
-      alert("Please enter valid phone number");
+      alert("Enter valid phone number");
       return;
     }
-
     setSendingOtp(true);
     setTimeout(() => {
       setSendingOtp(false);
       setOtpSent(true);
-      alert("OTP sent successfully");
-    }, 1500);
+    }, 1000);
   };
 
-  /* ================= SUBMIT ================= */
   const handleSubmit = () => {
-    console.log("FINAL FORM DATA:", formData);
-    alert("Loan Application Submitted Successfully");
+    alert("Loan Application Submitted");
+    console.log(formData);
   };
 
   return (
-    <div className="flex items-center justify-center bg-white mt-5 mb-5">
-      <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6">
+    <div className="min-h-screen bg-[#f5f6fa] flex justify-center py-4 px-3">
+      <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg overflow-hidden">
 
-        {/* HEADING */}
-        <h2 className="text-2xl font-semibold text-center text-gray-800">
-          Loan Application
-        </h2>
-        <p className="text-sm text-gray-500 text-center mb-6">
-          Step {step} of 3
+        <Header />
+        <AmountCard amount={formData.amount} />
+        <HowToGetLoan />
+        <LoanSteps step={step} />
+
+        <div className="px-4 mt-4 space-y-3">
+          {step === 1 && (
+            <StepOne
+              formData={formData}
+              setFormData={setFormData}
+              sendOtp={sendOtp}
+              sendingOtp={sendingOtp}
+              otpSent={otpSent}
+              otpRefs={otpRefs}
+              handleOtpChange={handleOtpChange}
+              onNext={() => setStep(2)}
+            />
+          )}
+
+          {step === 2 && (
+            <StepTwo
+              formData={formData}
+              setFormData={setFormData}
+              onBack={() => setStep(1)}
+              onNext={() => setStep(3)}
+            />
+          )}
+
+          {step === 3 && (
+            <StepThree
+              formData={formData}
+              setFormData={setFormData}
+              onBack={() => setStep(2)}
+              onSubmit={handleSubmit}
+            />
+          )}
+        </div>
+
+        <Footer />
+      </div>
+
+      <GlobalStyles />
+    </div>
+  );
+};
+
+/* ===================== SUB COMPONENTS ===================== */
+
+const Header = () => (
+  <div className="px-5 pt-6">
+    <h2 className="text-lg font-semibold text-gray-700">Welcome!</h2>
+    <h1 className="text-xl font-bold text-gray-900">Money Keeper</h1>
+  </div>
+);
+
+const AmountCard = ({ amount }) => (
+  <div className="mx-4 mt-4 bg-[#f8f9fb] rounded-2xl p-5 text-center">
+    <h2 className="text-3xl font-extrabold">₹{amount.toLocaleString()}</h2>
+    <div className="flex justify-center gap-2 mt-3">
+      <span className="w-10 h-2 rounded bg-red-400" />
+      <span className="w-10 h-2 rounded bg-orange-400" />
+      <span className="w-10 h-2 rounded bg-lime-400" />
+      <span className="w-10 h-2 rounded bg-green-500" />
+    </div>
+    <button className="mt-4 w-full bg-yellow-400 font-semibold py-2 rounded-full">
+      Get My Loan
+    </button>
+  </div>
+);
+
+const HowToGetLoan = () => (
+  <div className="mx-4 mt-4 bg-[#f3f4f6] rounded-xl p-4 flex justify-between">
+    <div>
+      <h4 className="text-sm font-semibold">How to get a Loan</h4>
+      <p className="text-xs text-gray-500">
+        Only 3 steps are required<br />to successfully borrow
+      </p>
+    </div>
+    <span className="text-2xl">👌</span>
+  </div>
+);
+
+const LoanSteps = ({ step }) => (
+  <div className="mx-4 mt-4 bg-white rounded-xl border p-4">
+    <h4 className="text-sm font-semibold mb-3">Loan in 3 steps</h4>
+    <div className="flex justify-between text-xs">
+      <span className={step === 1 ? "text-yellow-500 font-semibold" : ""}>
+        Step 1<br />Basic Info
+      </span>
+      <span className={step === 2 ? "text-yellow-500 font-semibold" : ""}>
+        Step 2<br />Adhar details 
+      </span>
+      <span className={step === 3 ? "text-yellow-500 font-semibold" : ""}>
+        Step 3<br />Like Book
+      </span>
+    </div>
+  </div>
+);
+
+/* ===================== STEPS ===================== */
+
+const StepOne = ({
+  formData,
+  setFormData,
+  sendOtp,
+  sendingOtp,
+  otpSent,
+  otpRefs,
+  handleOtpChange,
+  onNext,
+}) => (
+  <div className="space-y-4">
+    <Input label="First Name" onChange={(e) =>
+      setFormData({ ...formData, firstName: e.target.value })
+    } />
+    <Input label="Last Name" onChange={(e) =>
+      setFormData({ ...formData, lastName: e.target.value })
+    } />
+
+    <div>
+      <label className="label">Phone Number</label>
+      <div className="flex gap-2">
+        <input
+          maxLength={10}
+          className="input flex-1"
+          onChange={(e) =>
+            setFormData({ ...formData, phone: e.target.value })
+          }
+        />
+        <button onClick={sendOtp} className="btn-primary">
+          {sendingOtp ? "Sending..." : otpSent ? "Resend" : "Send OTP"}
+        </button>
+      </div>
+    </div>
+
+    {otpSent && (
+      <div className="flex justify-center gap-3">
+        {formData.otp.map((_, i) => (
+          <input
+            key={i}
+            ref={(el) => (otpRefs.current[i] = el)}
+            maxLength={1}
+            className="otp-box"
+            onChange={(e) => handleOtpChange(e.target.value, i)}
+          />
+        ))}
+      </div>
+    )}
+
+    <button disabled={!otpSent} onClick={onNext} className="btn-primary w-full">
+      Continue
+    </button>
+  </div>
+);
+
+const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
+    const PAN_SCORE_KEY = "pan_score_value";
+  const [panScore, setPanScore] = useState(null);
+
+  /* 🔹 LOAD PAN SCORE FROM LOCALSTORAGE (ONCE) */
+  useEffect(() => {
+    const savedScore = localStorage.getItem(PAN_SCORE_KEY);
+    if (savedScore) {
+      setPanScore(Number(savedScore));
+    }
+  }, []);
+
+  /* 🔹 PAN SCORE GENERATOR (ONE TIME ONLY) */
+  const generatePanScore = () => {
+    if (panScore) return;
+
+    const score = Math.floor(Math.random() * (900 - 300 + 1)) + 300;
+    setPanScore(score);
+    localStorage.setItem(PAN_SCORE_KEY, score);
+  };
+
+  return (
+    <div className="space-y-4">
+
+      {/* LOAN AMOUNT */}
+      <div>
+        <label className="label">Loan Amount</label>
+        <p className="font-semibold text-blue-700">
+          ₹ {formData.amount.toLocaleString()}
         </p>
+        <input
+          type="range"
+          min="10000"
+          max="50000"
+          step="1000"
+          value={formData.amount}
+          onChange={(e) =>
+            setFormData({ ...formData, amount: Number(e.target.value) })
+          }
+          className="w-full"
+        />
+      </div>
 
-        {/* ================= STEP 1 ================= */}
-        {step === 1 && (
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                First Name
-              </label>
-              <input
-                type="text"
-                className="input"
-                placeholder="Enter first name"
-                onChange={(e) =>
-                  setFormData({ ...formData, firstName: e.target.value })
-                }
-              />
-            </div>
+      {/* AADHAAR */}
+      <FileInput
+        label="Aadhaar Front"
+        onChange={(e) =>
+          setFormData({ ...formData, aadhaarFront: e.target.files[0] })
+        }
+      />
 
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                Last Name
-              </label>
-              <input
-                type="text"
-                className="input"
-                placeholder="Enter last name"
-                onChange={(e) =>
-                  setFormData({ ...formData, lastName: e.target.value })
-                }
-              />
-            </div>
+      <FileInput
+        label="Aadhaar Back"
+        onChange={(e) =>
+          setFormData({ ...formData, aadhaarBack: e.target.files[0] })
+        }
+      />
 
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                Phone Number
-              </label>
-              <div className="flex gap-2 mt-1">
-                <input
-                  type="tel"
-                  maxLength={10}
-                  className="input flex-1"
-                  placeholder="Enter phone number"
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                />
-                <button
-                  type="button"
-                  onClick={sendOtp}
-                  disabled={sendingOtp}
-                  className="px-4 rounded-lg bg-blue-600 text-white text-sm
-                             hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {sendingOtp
-                    ? "Sending..."
-                    : otpSent
-                    ? "Resend OTP"
-                    : "Send OTP"}
-                </button>
-              </div>
-            </div>
+      {/* PAN NUMBER */}
+      <Input
+        label="PAN Number"
+        placeholder="ABCDE1234F"
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            panNumber: e.target.value.toUpperCase(),
+          })
+        }
+      />
 
-            {otpSent && (
-              <div>
-                <label className="text-sm font-medium text-gray-600 block mb-2">
-                  Enter OTP
-                </label>
-                <div className="flex justify-center gap-3">
-                  {formData.otp.map((_, i) => (
-                    <input
-                      key={i}
-                      ref={(el) => (otpRefs.current[i] = el)}
-                      maxLength={1}
-                      className="w-12 h-12 text-center text-lg font-semibold border rounded-lg"
-                      onChange={(e) =>
-                        handleOtpChange(e.target.value, i)
-                      }
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+      {/* PAN SCORE CHECK */}
+      <div className="bg-gray-50 border rounded-xl p-4">
+        <label className="label">PAN Score</label>
 
-            <button
-              onClick={() => setStep(2)}
-              disabled={!otpSent}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg
-                         hover:bg-blue-700 disabled:opacity-50"
+        {!panScore ? (
+          <button
+            onClick={generatePanScore}
+            className="btn-primary w-full"
+          >
+            Check PAN Score
+          </button>
+        ) : (
+          <div className="text-center mt-3">
+            <p className="text-xs text-gray-500">Your PAN Score</p>
+            <p
+              className={`text-3xl font-bold ${
+                panScore >= 700
+                  ? "text-green-600"
+                  : panScore >= 500
+                  ? "text-yellow-500"
+                  : "text-red-500"
+              }`}
             >
-              Next
-            </button>
-          </div>
-        )}
-
-        {/* ================= STEP 2 ================= */}
-        {step === 2 && (
-          <div className="space-y-5">
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                Select Loan Amount
-              </label>
-              <p className="text-lg font-semibold text-blue-600 mb-1">
-                ₹ {formData.amount.toLocaleString()}
-              </p>
-              <input
-                type="range"
-                min="10000"
-                max="50000"
-                step="1000"
-                value={formData.amount}
-                onChange={(e) =>
-                  setFormData({ ...formData, amount: Number(e.target.value) })
-                }
-                className="w-full"
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                Aadhaar Card (Front)
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                className="file-input"
-                onChange={(e) =>
-                  setFormData({ ...formData, aadhaarFront: e.target.files[0] })
-                }
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                Aadhaar Card (Back)
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                className="file-input"
-                onChange={(e) =>
-                  setFormData({ ...formData, aadhaarBack: e.target.files[0] })
-                }
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                PAN Card Number
-              </label>
-              <input
-                type="text"
-                className="input uppercase"
-                placeholder="ABCDE1234F"
-                onChange={(e) =>
-                  setFormData({ ...formData, panNumber: e.target.value })
-                }
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                PAN Card Upload
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                className="file-input"
-                onChange={(e) =>
-                  setFormData({ ...formData, panFile: e.target.files[0] })
-                }
-              />
-            </div>
-
-            <div className="flex gap-3 pt-2">
-              <button
-                onClick={() => setStep(1)}
-                className="w-1/2 border py-2 rounded-lg"
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => setStep(3)}
-                className="w-1/2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ================= STEP 3 ================= */}
-        {step === 3 && (
-          <div className="space-y-5">
-            <div>
-              <label className="text-sm font-medium text-gray-600">
-                Which book do you like
-              </label>
-              <select
-                className="input"
-                value={formData.bookType}
-                onChange={(e) =>
-                  setFormData({ ...formData, bookType: e.target.value })
-                }
-              >
-                <option value="">Select book</option>
-                <option value="Demand 999">Demand 999</option>
-                <option value="King Exchange All Panel">
-                  King Exchange All Panel
-                </option>
-                <option value="Mahakar Book">Mahakar Book</option>
-              </select>
-            </div>
-
-            <div className="flex gap-3 pt-2">
-              <button
-                onClick={() => setStep(2)}
-                className="w-1/2 border py-2 rounded-lg"
-              >
-                Previous
-              </button>
-              <button
-                onClick={handleSubmit}
-                disabled={!formData.bookType}
-                className="w-1/2 bg-green-600 text-white py-2 rounded-lg
-                           hover:bg-green-700 disabled:opacity-50"
-              >
-                Submit
-              </button>
-            </div>
+              {panScore}
+            </p>
           </div>
         )}
       </div>
 
-      {/* COMMON INPUT STYLES */}
-      <style>
-        {`
-          .input {
-            width: 100%;
-            padding: 0.5rem 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            margin-top: 0.25rem;
-          }
-          .file-input {
-            width: 100%;
-            border: 1px dashed #d1d5db;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            background: #f9fafb;
-            margin-top: 0.25rem;
-          }
-        `}
-      </style>
+      {/* PAN FILE */}
+      <FileInput
+        label="PAN Upload"
+        onChange={(e) =>
+          setFormData({ ...formData, panFile: e.target.files[0] })
+        }
+      />
+
+      {/* ACTION BUTTONS */}
+      <div className="flex gap-3">
+        <button onClick={onBack} className="btn-secondary w-1/2">
+          Back
+        </button>
+        <button
+          onClick={onNext}
+          className="btn-primary w-1/2"
+          disabled={!panScore}
+        >
+          Continue
+        </button>
+      </div>
     </div>
   );
 };
+
+const StepThree = ({ formData, setFormData, onBack, onSubmit }) => (
+  <div className="space-y-4">
+    <select
+      className="input"
+      value={formData.bookType}
+      onChange={(e) =>
+        setFormData({ ...formData, bookType: e.target.value })
+      }
+    >
+      <option value="">Select book</option>
+      <option>Demand 999</option>
+      <option>King Exchange</option>
+      <option>Mahakar Book</option>
+    </select>
+
+    <div className="flex gap-3">
+      <button onClick={onBack} className="btn-secondary w-1/2">Back</button>
+      <button disabled={!formData.bookType} onClick={onSubmit} className="btn-success w-1/2">
+        Submit
+      </button>
+    </div>
+  </div>
+);
+
+const Footer = () => (
+  <div className="text-center text-[10px] text-gray-400 mt-6 px-4 pb-4">
+    Regulated by RBI <br /> SSA Finserv Private Limited
+  </div>
+);
+
+/* ===================== REUSABLE ===================== */
+
+const Input = ({ label, ...props }) => (
+  <div>
+    <label className="label">{label}</label>
+    <input className="input" {...props} />
+  </div>
+);
+
+const FileInput = ({ label, ...props }) => (
+  <div>
+    <label className="label">{label}</label>
+    <input type="file" className="input" {...props} />
+  </div>
+);
+
+const GlobalStyles = () => (
+  <style>{`
+    .label { font-size: 12px; font-weight: 600; }
+    .input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.7rem;
+    }
+    .btn-primary {
+      background: #facc15;
+      padding: 0.7rem;
+      border-radius: 0.7rem;
+      font-weight: 600;
+    }
+    .btn-secondary {
+      background: #e5e7eb;
+      padding: 0.7rem;
+      border-radius: 0.7rem;
+    }
+    .btn-success {
+      background: #22c55e;
+      color: white;
+      padding: 0.7rem;
+      border-radius: 0.7rem;
+      font-weight: 600;
+    }
+    .otp-box {
+      width: 3rem;
+      height: 3rem;
+      text-align: center;
+      border-radius: 0.6rem;
+      border: 1px solid #d1d5db;
+    }
+  `}</style>
+);
 
 export default LoanApplicationForm;

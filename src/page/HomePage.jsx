@@ -12,7 +12,7 @@ import Mahakal from "../Component/Mahakal";
 
 const HomePage = () => {
   return (
-    <div className="bg-black">
+    <div className="">
       <Navbar />
 
       {/* HOME */}

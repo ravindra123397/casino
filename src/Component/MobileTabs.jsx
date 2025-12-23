@@ -1,26 +1,37 @@
 import React, { useState } from "react";
 import {
   Home,
-  Repeat,
-  Wallet,
-  User,
   FileText,
+  Trophy,
+  User,
+  Wallet,
   Clock,
   CreditCard,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
+/* ================= BOTTOM TABS ================= */
 const bottomTabs = [
-  { icon: <Home />, target: "home" },
-  { icon: <Repeat />, target: "exchange" },
-  { icon: <Wallet />, target: "loan" },
+  {
+    icon: <Home />,
+    route: "/", // 🏠 HOME
+  },
+  {
+    icon: <FileText />,
+    route: "/complete-form", // 📄 FORM
+  },
+  {
+    icon: <Trophy />, // 🏏 CRICKET
+    target: "cricket-section",
+  },
 ];
 
+/* ================= USER DROPDOWN ================= */
 const userMenuTabs = [
   {
     icon: <FileText />,
     label: "Complete Form",
-    route: "/complete-form", // 🔥 ROUTE
+    route: "/complete-form",
   },
   {
     icon: <CreditCard />,
@@ -42,27 +53,51 @@ const userMenuTabs = [
 const MobileTabs = () => {
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleScroll = (id) => {
-    setOpenUserMenu(false);
+  /* ================= SCROLL FUNCTION ================= */
+  const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
+  /* ================= TAB HANDLER ================= */
+  const handleTabClick = (tab) => {
+    setOpenUserMenu(false);
+
+    // 👉 Route only
+    if (tab.route && !tab.target) {
+      navigate(tab.route);
+      return;
+    }
+
+    // 👉 Cricket: go to home first, then scroll
+    if (tab.target) {
+      if (location.pathname !== "/") {
+        navigate("/");
+
+        setTimeout(() => {
+          scrollToSection(tab.target);
+        }, 300); // ⏱️ small delay after navigation
+      } else {
+        scrollToSection(tab.target);
+      }
+    }
+  };
+
+  /* ================= USER MENU HANDLER ================= */
   const handleUserAction = (item) => {
     setOpenUserMenu(false);
 
-    // 👉 Route redirect
     if (item.route) {
       navigate(item.route);
       return;
     }
 
-    // 👉 Same page scroll
     if (item.target) {
-      handleScroll(item.target);
+      scrollToSection(item.target);
     }
   };
 
@@ -106,21 +141,22 @@ const MobileTabs = () => {
         ))}
       </div>
 
-      {/* BOTTOM TABS */}
+      {/* ================= BOTTOM BAR ================= */}
       <div className="fixed bottom-0 left-0 w-full bg-[#0b1a2a] z-50 sm:hidden">
         <div className="flex justify-around items-center h-14">
 
+          {/* FIRST 3 TABS */}
           {bottomTabs.map((tab, index) => (
             <button
               key={index}
-              onClick={() => handleScroll(tab.target)}
+              onClick={() => handleTabClick(tab)}
               className="flex items-center justify-center w-full h-full text-red-600"
             >
               {React.cloneElement(tab.icon, { size: 22 })}
             </button>
           ))}
 
-          {/* USER */}
+          {/* USER TAB */}
           <button
             onClick={() => setOpenUserMenu(!openUserMenu)}
             className={`flex items-center justify-center w-full h-full

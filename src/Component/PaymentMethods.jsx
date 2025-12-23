@@ -53,7 +53,7 @@ const PaymentMethods = () => {
     (intervalRef.current = setInterval(scrollRight, 2500));
 
   return (
-    <section className="w-full   ">
+    <section className="w-full  bg-black mt-7 ">
       <div className=" relative">
 
         {/* LEFT ARROW */}
@@ -72,21 +72,21 @@ const PaymentMethods = () => {
           ref={sliderRef}
           onMouseEnter={pause}
           onMouseLeave={resume}
-          className="flex gap-6 overflow-x-auto scrollbar-hide
+          className="flex  overflow-x-auto scrollbar-hide
                       rounded-xl px-12 py-4 scroll-smooth"
         >
-          {[...payments, ...payments].map((item, index) => (
+          {[...payments, ...payments, ...payments].map((item, index) => (
             <div
               key={index}
-              className="min-w-[120px] h-[48px]
-                         flex items-center justify-center
+              className="min-w-[100px] h-[88px]
+                         flex gap-9 items-center justify-center
                           rounded-lg
                          hover:bg-[#162f46] transition"
             >
               <img
                 src={item.logo}
                 alt={item.name}
-                className="max-h-16 object-contain"
+                className="max-h-20 object-contain "
               />
             </div>
           ))}

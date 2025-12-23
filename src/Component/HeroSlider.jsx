@@ -1,34 +1,33 @@
 import React, { useEffect, useState } from "react";
-import {
-  Swords,
-  Trophy,
-  Dice5,
-  Club,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-/* Slider Images */
-import imagge1 from "../assets/1.png";
-import imagge2 from "../assets/2.png";
-import imagge3 from "../assets/3.png";
-import imagge4 from "../assets/4.png";
-import imagge5 from "../assets/5.png";
+/* ================= SLIDER IMAGES ================= */
+import image1 from "../assets/mahakal1.png";
+import image2 from "../assets/mahaka2.png";
+import image3 from "../assets/mahaka3.png";
+import image4 from "../assets/mahaka4.png";
+import image5 from "../assets/mahakal5.png";
 
-const slides = [imagge1];
+/* ================= CARD IMAGES ================= */
+import card1 from "../assets/mahakal1.png";
+import card2 from "../assets/mahaka2.png";
+import card3 from "../assets/mahaka3.png";
+import card4 from "../assets/mahaka4.png";
+import card5 from "../assets/mahakal5.png";
+const slides = [image1, image2, image3, image4, image5];
 
-/* Overlay Cards */
 const cards = [
-  { title: "Cricket Bets", action: "Show Bets", icon: <Swords /> },
-  { title: "Sport Bets", action: "Show Bets", icon: <Trophy /> },
-  { title: "Casino", action: "Show Games", icon: <Dice5 /> },
-  { title: "Live Casino", action: "All Live Games", icon: <Club /> },
+  { image: card1 },
+  { image: card2 },
+  { image: card3 },
+  { image: card4 },
+  { image: card5 },
 ];
 
 const HeroSlider = () => {
   const [current, setCurrent] = useState(0);
 
-  /* 🔁 Auto Slide */
+  /* 🔁 AUTO SLIDE */
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
@@ -45,7 +44,7 @@ const HeroSlider = () => {
   return (
     <section className="relative w-full overflow-visible">
       {/* ================= SLIDER ================= */}
-      <div className="relative w-full h-[240px] sm:h-[360px] md:h-[460px] lg:h-[540px] overflow-hidden">
+      <div className="relative w-full h-[340px] sm:h-[360px] md:h-[460px] lg:h-[540px] overflow-hidden">
         {slides.map((img, index) => (
           <img
             key={index}
@@ -57,13 +56,14 @@ const HeroSlider = () => {
           />
         ))}
 
+        {/* DARK GRADIENT */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/10" />
 
         {/* DESKTOP CONTROLS */}
         <div className="hidden sm:flex absolute bottom-28 right-6 z-30 items-center gap-3">
           <button
             onClick={prevSlide}
-            className="p-2 rounded-full bg-black/40 text-white hover:text-red-600"
+            className="p-2 rounded-full bg-black/40 text-white hover:text-red-500"
           >
             <ChevronLeft size={22} />
           </button>
@@ -84,21 +84,20 @@ const HeroSlider = () => {
 
           <button
             onClick={nextSlide}
-            className="p-2 rounded-full bg-black/40 text-white hover:text-red-600"
+            className="p-2 rounded-full bg-black/40 text-white hover:text-red-500"
           >
             <ChevronRight size={22} />
           </button>
         </div>
       </div>
 
-      {/* ================= OVERLAY CARDS ================= */}
+      {/* ================= IMAGE CARDS ================= */}
       <div className="absolute left-0 w-full z-40 -translate-y-4 sm:-translate-y-24">
         <div className="max-w-7xl mx-auto px-3">
 
-          {/* MOBILE → SCROLL | DESKTOP → IMAGE STYLE GRID */}
           <div
             className="
-              flex gap-2 overflow-x-auto pb-1
+              flex gap-3 overflow-x-auto pb-2
               sm:grid sm:grid-cols-4 sm:gap-6 sm:overflow-visible
               scrollbar-hide
             "
@@ -107,46 +106,22 @@ const HeroSlider = () => {
               <div
                 key={index}
                 className="
-                  min-w-[110px]
+                  min-w-[120px]
                   sm:min-w-0
-                  bg-gradient-to-b from-[#0f2238] to-[#0b1a2a]
                   rounded-xl
-                  flex flex-col sm:flex-row
-                  items-center sm:items-center
-                  justify-center sm:justify-start
-                  gap-1 sm:gap-4
-                  py-2 px-2
-                  sm:py-6 sm:px-6
+                  overflow-hidden
                   shadow-xl
-                  hover:bg-[#0e2238]
+                  bg-[#0b1a2a]
+                  hover:scale-105
                   transition-all duration-300
+                  cursor-pointer
                 "
               >
-                {/* Icon */}
-                <div
-                  className="
-                    w-8 h-8
-                    sm:w-14 sm:h-14
-                    flex items-center justify-center
-                    rounded-lg
-                    bg-[#12263d]
-                  "
-                >
-                  {React.cloneElement(item.icon, {
-                    size: 16,
-                    className: "text-red-600 sm:size-[26px]",
-                  })}
-                </div>
-
-                {/* Text */}
-                <div className="text-center sm:text-left leading-tight">
-                  <h4 className="text-white text-[11px] sm:text-lg font-semibold">
-                    {item.title}
-                  </h4>
-                  <p className="text-red-600 text-[9px] sm:text-sm mt-0.5">
-                    {item.action} →
-                  </p>
-                </div>
+                <img
+                  src={item.image}
+                  alt="Card"
+                  className="w-full h-[90px] sm:h-[160px] object-cover"
+                />
               </div>
             ))}
           </div>

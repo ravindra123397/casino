@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import Navbar from "./Navbar";
+import MobileTabs from "./MobileTabs";
 
 /* ===================== MAIN COMPONENT ===================== */
 const LoanApplicationForm = () => {
@@ -51,7 +53,10 @@ const LoanApplicationForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f6fa] flex justify-center py-4 px-3">
+
+    <>
+    <Navbar />
+      <div className="min-h-screen bg-[#f5f6fa] flex justify-center px-3 pt-20">
       <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg overflow-hidden">
 
         <Header />
@@ -94,16 +99,18 @@ const LoanApplicationForm = () => {
 
         <Footer />
       </div>
-
+      <MobileTabs />
       <GlobalStyles />
     </div>
+    </>
+  
   );
 };
 
 /* ===================== SUB COMPONENTS ===================== */
 
 const Header = () => (
-  <div className="px-5 pt-6">
+  <div className="px-5 pt-5 ">
     <h2 className="text-lg font-semibold text-gray-700">Welcome!</h2>
     <h1 className="text-xl font-bold text-gray-900">Money Keeper</h1>
   </div>
@@ -118,7 +125,7 @@ const AmountCard = ({ amount }) => (
       <span className="w-10 h-2 rounded bg-lime-400" />
       <span className="w-10 h-2 rounded bg-green-500" />
     </div>
-    <button className="mt-4 w-full bg-yellow-400 font-semibold py-2 rounded-full">
+    <button className="mt-4 w-full bg-red-500 font-semibold py-2 rounded-full">
       Get My Loan
     </button>
   </div>

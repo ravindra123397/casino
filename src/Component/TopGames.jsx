@@ -25,12 +25,12 @@ const games = [
 
 const TopGames = () => {
   return (
-    <section className="w-full bg-[#08131e] py-10 px-4">
+    <section className="w-full bg-black -mt-12 px-4">
       <div className="max-w-7xl mx-auto">
 
         {/* HEADER */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-white text-2xl font-semibold">Play Casino on Crebit</h2>
+          <h2 className="text-white text-2xl font-semibold">Play Casino on Credit</h2>
 
 
         </div>
@@ -45,10 +45,7 @@ const TopGames = () => {
         hover:scale-105 transition-transform duration-300
         ${index >= 6 ? "hidden sm:block" : "block"}`}
             >
-              {/* Favorite Icon */}
-              <button className="absolute top-3 right-3 z-10 text-white/70 hover:text-red-600">
-                <Heart size={18} />
-              </button>
+             
 
               {/* Image */}
               <img
@@ -64,7 +61,7 @@ const TopGames = () => {
           ))}
         </div>
 
-
+      
 
       </div>
     </section>

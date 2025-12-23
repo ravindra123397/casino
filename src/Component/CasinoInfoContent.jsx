@@ -4,7 +4,7 @@ import PaymentMethods from "./PaymentMethods";
 const CasinoInfoContent = () => {
   return (
     <>
-      <section className="w-full bg-gradient-to-b from-[#08131e] to-[#02080f] px-4 py-14">
+      <section className="w-full bg-gradient-to-b from-[#08131e] to-[#02080f] px-4 py-14 -mt-11">
 
       {/* MAIN CONTENT */}
       <div className="max-w-7xl mx-auto text-gray-300 text-base md:text-lg leading-7 md:leading-8">

@@ -30,10 +30,10 @@ const Navbar = () => {
 
           {/* MOBILE ACTIONS */}
           <div className="flex lg:hidden items-center gap-3">
-            <button className="bg-red-600 hover:bg-red active:bg-yellow-600
-                               text-black font-semibold text-sm px-11 py-1.5
+            <button className="bg-red-600 hover:bg-red active:bg-red-800
+                               text-white font-semibold text-sm px-11 py-1.5
                                rounded-md transition">
-              Get a Crebit 
+              Get a Credit
             </button>
           </div>
 

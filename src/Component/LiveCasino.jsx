@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useInView } from "react-intersection-observer";
+import PlayCasinoLoanButton from "./PlayCasinoLoanButton";
 
 const liveCasinoGames = [
   {
@@ -39,6 +41,12 @@ const LiveCasinoSlider = () => {
   const intervalRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
 
+  /* 👁️ INTERSECTION OBSERVER */
+  const { ref: sectionRef, inView } = useInView({
+    threshold: 0.3, // 30% visible
+    triggerOnce: false,
+  });
+
   const scrollRight = () => {
     if (!sliderRef.current || isHovering) return;
     sliderRef.current.scrollBy({ left: 300, behavior: "smooth" });
@@ -49,24 +57,26 @@ const LiveCasinoSlider = () => {
     sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
   };
 
-  /* 🔁 AUTO SLIDE */
+  /* 🔁 AUTO SLIDE (ONLY WHEN IN VIEW) */
   useEffect(() => {
-    intervalRef.current = setInterval(scrollRight, 3000);
-    return () => clearInterval(intervalRef.current);
-  }, [isHovering]);
+    if (inView && !isHovering) {
+      intervalRef.current = setInterval(scrollRight, 6000);
+    }
 
-  const pauseAuto = () => clearInterval(intervalRef.current);
-  const resumeAuto = () =>
-    (intervalRef.current = setInterval(scrollRight, 3000));
+    return () => clearInterval(intervalRef.current);
+  }, [inView, isHovering]);
 
   return (
-    <section className="w-full bg-[#08131e] py-5 px-4">
+    <section
+      ref={sectionRef}
+      className="w-full bg-[#08131e] py-5 px-4"
+    >
       <div
         className={`mx-auto transition-all duration-700 ease-in-out
           ${isHovering ? "max-w-full" : "max-w-7xl"}`}
       >
         {/* HEADER */}
-        <div className="flex items-center justify-between  px-2">
+        <div className="flex items-center justify-between px-2 mb-4">
           <h2 className="text-white text-2xl font-semibold uppercase">
             Live Casino
           </h2>
@@ -92,15 +102,15 @@ const LiveCasinoSlider = () => {
           </div>
         </div>
 
-        {/* SLIDER / EXPANDED VIEW */}
+        {/* SLIDER */}
         <div
           ref={sliderRef}
-         
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
           className={`transition-all duration-700 ease-in-out
-            ${
-              isHovering
-                ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
-                : "flex gap-6 overflow-x-auto scrollbar-hide"
+            ${isHovering
+              ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+              : "flex gap-6 overflow-x-auto scrollbar-hide"
             }
             pb-6`}
         >
@@ -109,25 +119,26 @@ const LiveCasinoSlider = () => {
               key={index}
               className={`relative rounded-xl overflow-hidden bg-[#0f1e2e]
                 cursor-pointer transition-all duration-700 ease-in-out
-                ${
-                  isHovering
-                    ? "h-[260px]"
-                    : "min-w-[220px] sm:min-w-[240px] md:min-w-[260px] hover:scale-105"
+                ${isHovering
+                  ? "h-[260px]"
+                  : "min-w-[220px] sm:min-w-[240px] md:min-w-[260px] hover:scale-105"
                 }`}
             >
-              {/* IMAGE */}
               <img
                 src={game.image}
                 alt={game.title}
                 className="w-full h-full object-cover"
               />
 
-              {/* OVERLAY */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
             </div>
           ))}
         </div>
       </div>
+      <div className="-mt-12">
+        <PlayCasinoLoanButton />
+      </div>
+
     </section>
   );
 };

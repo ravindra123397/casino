@@ -75,7 +75,7 @@ const PaymentMethods = () => {
           className="flex  overflow-x-auto scrollbar-hide
                       rounded-xl px-12 py-4 scroll-smooth"
         >
-          {[...payments, ...payments, ...payments].map((item, index) => (
+          {[...payments, ...payments,].map((item, index) => (
             <div
               key={index}
               className="min-w-[100px] h-[88px]

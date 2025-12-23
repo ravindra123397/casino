@@ -1,11 +1,11 @@
 import React from "react";
 
-const PlayCasinoLoanButton = ({ onClick }) => {
-  return (
-    <div className="md:hidden flex justify-center  ">
-      <button
-        onClick={onClick}
-        className="
+const GetloanButton = ({ onClick }) => {
+    return (
+        <div className="md:hidden flex justify-center  ">
+            <button
+                onClick={onClick}
+                className="
           inline-flex items-center justify-center
           px-6 py-4
           font-bold text-lg
@@ -18,11 +18,11 @@ const PlayCasinoLoanButton = ({ onClick }) => {
           
           rounded-xl
         "
-      >
-        Play Casino on Loan
-      </button>
-    </div>
-  );
+            >
+                Get your loan now
+            </button>
+        </div>
+    );
 };
 
-export default PlayCasinoLoanButton;
+export default GetloanButton;

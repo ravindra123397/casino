@@ -55,12 +55,21 @@ const MobileTabs = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  /* ================= SCROLL FUNCTION ================= */
+  /* ================= SCROLL WITH OFFSET (FIX) ================= */
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (!el) return;
+
+    const NAVBAR_OFFSET = 80; // 👈 navbar height
+    const y =
+      el.getBoundingClientRect().top +
+      window.pageYOffset -
+      NAVBAR_OFFSET;
+
+    window.scrollTo({
+      top: y,
+      behavior: "smooth",
+    });
   };
 
   /* ================= TAB HANDLER ================= */
@@ -73,14 +82,14 @@ const MobileTabs = () => {
       return;
     }
 
-    // 👉 Cricket: go to home first, then scroll
+    // 👉 Scroll target
     if (tab.target) {
       if (location.pathname !== "/") {
         navigate("/");
 
         setTimeout(() => {
           scrollToSection(tab.target);
-        }, 300); // ⏱️ small delay after navigation
+        }, 300);
       } else {
         scrollToSection(tab.target);
       }
@@ -97,13 +106,20 @@ const MobileTabs = () => {
     }
 
     if (item.target) {
-      scrollToSection(item.target);
+      if (location.pathname !== "/") {
+        navigate("/");
+        setTimeout(() => {
+          scrollToSection(item.target);
+        }, 300);
+      } else {
+        scrollToSection(item.target);
+      }
     }
   };
 
   return (
     <>
-      {/* OVERLAY */}
+      {/* ================= OVERLAY ================= */}
       {openUserMenu && (
         <div
           className="fixed inset-0 bg-black/40 z-40 sm:hidden"
@@ -111,7 +127,7 @@ const MobileTabs = () => {
         />
       )}
 
-      {/* USER DROPDOWN */}
+      {/* ================= USER DROPDOWN ================= */}
       <div
         className={`
           fixed bottom-14 right-3 w-56
@@ -165,7 +181,6 @@ const MobileTabs = () => {
           >
             <User size={22} />
           </button>
-
         </div>
       </div>
     </>

@@ -44,31 +44,50 @@ const HomePage = () => {
       {/* LOAN DISBURSED */}
       <section
         id="loan-disbursed"
-        className="bg-[#08131e] py-10 px-4 text-center"
+        className="bg-[#08131e] py-12 px-4 text-center "
       >
+        {/* HEADING */}
         <p
-          className="-mt-8
-      inline-block
-      text-yellow-400
-      text-lg sm:text-xl md:text-2xl
-      font-bold
-      uppercase
-      tracking-wide
-      relative
-      after:content-['']
-      after:block
-      after:w-16
-      after:h-[3px]
-      after:bg-gradient-to-r after:from-yellow-400 after:to-red-500
-      after:mx-auto
-      after:mt-2
-    "
+          className="-mt-8 inline-block text-center
+    text-yellow-400
+    text-lg sm:text-xl md:text-2xl
+    font-bold
+    uppercase
+    tracking-wide
+    relative
+    after:content-['']
+    after:block
+    after:w-16
+    after:h-[3px]
+    after:bg-gradient-to-r after:from-yellow-400 after:to-red-500
+    after:mx-auto
+    after:mt-2"
         >
-          Why Choose SAWARLIYA SETH BOOK
+          Why Choose Sawariya  SETH BOOK
         </p>
 
-        
+        {/* FEATURES LIST */}
+        <div className="mt-8 max-w-xl mx-auto space-y-3 text-gray-200 text-sm sm:text-base">
+
+          <p>⚡ Instant loan approval for online players</p>
+
+          <p>💰 Loan amount available up to <span className="text-yellow-400 font-semibold">₹50,000</span></p>
+
+          <p>🚀 Fast and smooth disbursal process</p>
+
+          <p>📅 Easy daily / flexible repayment options</p>
+
+          <p>📄 No lengthy paperwork or delays</p>
+
+          <p>🔗 Works with all major online books & platforms</p>
+
+          <p>🔒 Trusted, secure & transparent system</p>
+
+          <p>🕒 24×7 support for active players</p>
+
+        </div>
       </section>
+
 
       <CasinoInfoContent />
 

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import PlayCasinoLoanButton from "./PlayCasinoLoanButton";
+import GetloanButton from "./GetloanButton";
 
 const liveCasinoGames = [
   {
@@ -136,7 +137,7 @@ const LiveCasinoSlider = () => {
       </div>
 
       <div className="mt-4">
-        <PlayCasinoLoanButton />
+        <GetloanButton />
       </div>
     </section>
   );

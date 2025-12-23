@@ -147,14 +147,17 @@ const LoanSteps = ({ step }) => (
   <div className="mx-4 mt-4 bg-white rounded-xl border p-4">
     <h4 className="text-sm font-semibold mb-3">Loan in 3 steps</h4>
     <div className="flex justify-between text-xs">
-      <span className={step === 1 ? "text-yellow-500 font-semibold" : ""}>
-        Step 1<br />Basic Info
+      <span className={step === 1 ? "text-red-500 font-semibold" : ""}>
+        Step 1<br />basic details
       </span>
-      <span className={step === 2 ? "text-yellow-500 font-semibold" : ""}>
-        Step 2<br />Adhar details 
+      <span className={step === 2 ? "text-red-500 font-semibold" : ""}>
+        Step 2<br />Verification  
       </span>
-      <span className={step === 3 ? "text-yellow-500 font-semibold" : ""}>
-        Step 3<br />Like Book
+      <span className={step === 3 ? "text-red-500 font-semibold" : ""}>
+        Step 3<br />Select Exchange 
+      </span>
+       <span className={step === 4 ? "text-red-500 font-semibold" : ""}>
+        Step 4<br />disbursement
       </span>
     </div>
   </div>
@@ -261,14 +264,14 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
 
       {/* AADHAAR */}
       <FileInput
-        label="Aadhaar Front"
+        label="Aadhar Front"
         onChange={(e) =>
           setFormData({ ...formData, aadhaarFront: e.target.files[0] })
         }
       />
 
       <FileInput
-        label="Aadhaar Back"
+        label="Aadhar Back"
         onChange={(e) =>
           setFormData({ ...formData, aadhaarBack: e.target.files[0] })
         }
@@ -350,9 +353,10 @@ const StepThree = ({ formData, setFormData, onBack, onSubmit }) => (
       }
     >
       <option value="">Select book</option>
-      <option>Demand 999</option>
-      <option>King Exchange</option>
-      <option>Mahakar Book</option>
+      <option>Mahakal Book</option>
+      <option>Diamond999</option>
+      <option>All Panel</option>
+       <option>King Exchange</option>
     </select>
 
     <div className="flex gap-3">

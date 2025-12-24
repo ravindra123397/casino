@@ -1,22 +1,39 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+
 import LoanApplicationfrom from "./Component/LoanApplicationForm";
 import HomePage from "./page/HomePage";
-import "./App.css";
+import Login from "./page/Login";
+import AdminDashboard from "./page/AdminDashboard";
 import ScrollToTop from "./Component/ScrollToTop";
+
+import PublicRoute from "./route/PublicRoute";
+import PrivateRoute from "./route/PrivateRoute";
+import AdminLayout from "./layout/AdminLayout";
+
+import "./App.css";
 
 function App() {
   return (
     <>
-      {/* 🔝 SCROLL TO TOP ON ROUTE CHANGE */}
       <ScrollToTop />
 
       <Routes>
-        {/* HOME PAGE */}
+        {/* PUBLIC */}
         <Route path="/" element={<HomePage />} />
-
-        {/* COMPLETE FORM PAGE */}
         <Route path="/complete-form" element={<LoanApplicationfrom />} />
+
+        {/* AUTH */}
+        <Route element={<PublicRoute />}>
+          <Route path="/admin/login" element={<Login />} />
+        </Route>
+
+        {/* ADMIN PRIVATE */}
+        <Route element={<PrivateRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          </Route>
+        </Route>
       </Routes>
     </>
   );

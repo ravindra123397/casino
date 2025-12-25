@@ -49,7 +49,7 @@ const HomePage = () => {
         {/* HEADING */}
         <p
           className="-mt-8 inline-block text-center
-    text-yellow-400
+    text-red-600
     text-lg sm:text-xl md:text-2xl
     font-bold
     uppercase
@@ -59,7 +59,7 @@ const HomePage = () => {
     after:block
     after:w-16
     after:h-[3px]
-    after:bg-gradient-to-r after:from-yellow-400 after:to-red-500
+    after:bg-red-600
     after:mx-auto
     after:mt-2"
         >
@@ -71,7 +71,7 @@ const HomePage = () => {
 
           <p>⚡ Instant loan approval for online players</p>
 
-          <p>💰 Loan amount available up to <span className="text-yellow-400 font-semibold">₹50,000</span></p>
+          <p>💰 Loan amount available up to <span className="text-red-400 font-semibold">₹50,000</span></p>
 
           <p>🚀 Fast and smooth disbursal process</p>
 

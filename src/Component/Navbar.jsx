@@ -24,7 +24,7 @@ const Navbar = () => {
             <button className="bg-red-600 hover:bg-red active:bg-red-800
                                text-black font-semibold text-sm px-14 py-2
                                rounded-md transition">
-               Get a Crebit 
+               Get a Credit 
             </button>
           </div>
 

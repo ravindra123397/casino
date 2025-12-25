@@ -46,7 +46,7 @@ const HeroSlider = () => {
   return (
     <section className="relative w-full overflow-visible">
       {/* ================= SLIDER ================= */}
-      <div className="relative w-full h-[340px] sm:h-[360px] md:h-[460px] lg:h-[540px] overflow-hidden">
+      <div className="relative w-full h-[300px] sm:h-[360px] md:h-[460px] lg:h-[540px] overflow-hidden">
         {slides.map((img, index) => (
           <img
             key={index}

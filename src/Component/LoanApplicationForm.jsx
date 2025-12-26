@@ -325,7 +325,7 @@ const LoanSteps = ({ step }) => (
 
 /* ===================== STEP 2 ===================== */
 const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
-    const PAN_SCORE_KEY = "pan_score_value";
+  const PAN_SCORE_KEY = "pan_score_value";
   const [panScore, setPanScore] = useState(null);
 
   /* 🔹 LOAD PAN SCORE FROM LOCALSTORAGE (ONCE) */
@@ -340,10 +340,13 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
   const generatePanScore = () => {
     if (panScore) return;
 
-    const score = Math.floor(Math.random() * (900 - 300 + 1)) + 300;
+    // ✅ PAN SCORE BETWEEN 600 - 800 ONLY
+    const score = Math.floor(Math.random() * (800 - 600 + 1)) + 600;
+
     setPanScore(score);
     localStorage.setItem(PAN_SCORE_KEY, score);
   };
+
 
   return (
     <div className="space-y-4">
@@ -386,13 +389,17 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
       <Input
         label="PAN Number"
         placeholder="ABCDE1234F"
+        value={formData.panNumber}
         onChange={(e) =>
           setFormData({
             ...formData,
-            panNumber: e.target.value.toUpperCase(),
+            panNumber: e.target.value
+              .toUpperCase()   // ✅ CAPITAL
+              .replace(/\s/g, "") // ✅ NO SPACES
           })
         }
       />
+
 
       {/* PAN SCORE CHECK */}
       <div className="bg-gray-50 border rounded-xl p-4">
@@ -409,13 +416,12 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
           <div className="text-center mt-3">
             <p className="text-xs text-gray-500">Your PAN Score</p>
             <p
-              className={`text-3xl font-bold ${
-                panScore >= 700
+              className={`text-3xl font-bold ${panScore >= 700
                   ? "text-green-600"
                   : panScore >= 500
-                  ? "text-yellow-500"
-                  : "text-red-500"
-              }`}
+                    ? "text-yellow-500"
+                    : "text-red-500"
+                }`}
             >
               {panScore}
             </p>
@@ -480,7 +486,7 @@ const StepFour = ({ loanData, phone }) => {
   const dailyInterestRate = 0.01; // 1% daily
 
   const totalInterest = Math.round(loanAmount * dailyInterestRate * days);
-  const totalPayable = loanAmount + totalInterest;
+  const totalPayable = loanAmount;
   const dailyEmi = Math.round(totalPayable / days);
 
   const processingFee = Math.round((loanAmount * 11) / 100);

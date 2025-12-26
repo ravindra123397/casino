@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react"; // 👁️ ICONS
 import { loginAdminThunk } from "../Store/Slice/authSlice";
-import LoginImage from "../assets/loginImage.jpg"
+import LoginImage from "../assets/loginImage.jpg";
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,11 +19,13 @@ const Login = () => {
     remember: false,
   });
 
+  const [showPassword, setShowPassword] = useState(false); // 👈 NEW STATE
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/admin/dashboard");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -44,15 +48,13 @@ const Login = () => {
   return (
     <div className="w-full h-screen grid grid-cols-1 md:grid-cols-2">
 
-      {/* ================= LEFT IMAGE (IMG TAG) ================= */}
+      {/* ================= LEFT IMAGE ================= */}
       <div className="relative hidden md:block w-full h-full">
         <img
           src={LoginImage}
           alt="Login"
           className="w-full h-full object-fill"
         />
-
-        
       </div>
 
       {/* ================= RIGHT FORM ================= */}
@@ -74,6 +76,7 @@ const Login = () => {
               </p>
             )}
 
+            {/* EMAIL */}
             <input
               type="email"
               name="email"
@@ -84,16 +87,29 @@ const Login = () => {
               required
             />
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="w-full px-4 py-3 border border-gray-200 rounded
-                         focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={handleChange}
-              required
-            />
+            {/* PASSWORD WITH SHOW/HIDE ICON */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                className="w-full px-4 py-3 border border-gray-200 rounded
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12"
+                onChange={handleChange}
+                required
+              />
 
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2
+                           text-gray-500 hover:text-blue-600"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+
+            {/* REMEMBER ME */}
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <input
                 type="checkbox"

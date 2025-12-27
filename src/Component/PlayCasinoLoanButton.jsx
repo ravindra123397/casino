@@ -1,26 +1,52 @@
 import React from "react";
 
-const PlayCasinoLoanButton = ({ onClick }) => {
+const PlayCasinoLoanButton = ({ onClick, onWhatsAppClick }) => {
   return (
-    <div className="md:hidden flex justify-center  ">
-      <button
-        onClick={onClick}
-        className="
-          inline-flex items-center justify-center
-          px-6 py-4
-          font-bold text-lg
-          text-white
-          bg-red-600
-          shadow-lg
-          transition-all duration-300 ease-in-out
-          hover:scale-105 hover:shadow-2xl
-          active:scale-95
-          
-          rounded-xl
-        "
-      >
-        Play Casino on Loan
-      </button>
+    <div className="md:hidden flex justify-center px-4">
+      <div className="flex items-center gap-4">
+
+        {/* 🔴 PLAY CASINO ON LOAN */}
+        <button
+          onClick={onClick}
+          className="
+            inline-flex items-center justify-center
+            px-6 py-4
+            font-bold text-base
+            text-white
+            bg-red-600
+            shadow-lg
+            transition-all duration-300
+            hover:scale-105
+            active:scale-95
+            rounded-xl
+          "
+        >
+          Play Casino on Loan
+        </button>
+
+        {/* ⚪ TAKE ID DIRECTLY */}
+        <div className="flex flex-col items-center">
+          <button
+            onClick={onWhatsAppClick}
+            className="
+              inline-flex items-center justify-center
+              px-5 py-4
+              font-bold text-base
+              text-red-600
+              border-2 border-white
+              bg-transparent
+              rounded-xl
+              transition-all duration-300
+              hover:bg-white hover:text-red-600
+            "
+          >
+            Take ID Directly
+          </button>
+
+         
+        </div>
+
+      </div>
     </div>
   );
 };

@@ -1,26 +1,21 @@
 import React from "react";
-import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
-import image1 from "../assets/TopGames1.png"
-import image2 from "../assets/TopGames2.png"
-import image3 from "../assets/TopGames3.png"
-import image4 from "../assets/TopGames4.png"
+import image1 from "../assets/TopGames1.png";
+import image2 from "../assets/TopGames2.png";
+import image3 from "../assets/TopGames3.png";
+
 const games = [
   {
     image: image1,
+    link: "https://saffronexch247.com",
   },
   {
-
     image: image2,
+    link: "https://allpenellexch.com",
   },
   {
-
     image: image3,
+    link: "https://fairbet7.vip",
   },
-  {
-
-    image: image4,
-  },
-
 ];
 
 const TopGames = () => {
@@ -30,38 +25,31 @@ const TopGames = () => {
 
         {/* HEADER */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-white text-2xl font-semibold">Play Casino on Credit</h2>
-
-
+          <h2 className="text-white text-2xl font-semibold">
+            Play Casino on Credit
+          </h2>
         </div>
 
         {/* GAMES GRID */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
           {games.map((game, index) => (
-            <div
+            <a
               key={index}
-              className={`relative group rounded-xl overflow-hidden
-        bg-[#0f1e2e] cursor-pointer
-        hover:scale-105 transition-transform duration-300
-        ${index >= 6 ? "hidden sm:block" : "block"}`}
+              href={game.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative group rounded-xl overflow-hidden
+              bg-[#0f1e2e] cursor-pointer
+              hover:scale-105 transition-transform duration-300 block"
             >
-             
-
-              {/* Image */}
               <img
                 src={game.image}
-                alt={game.title}
+                alt="Casino Game"
                 className="w-full h-[140px] sm:h-[200px] object-cover"
               />
-
-
-
-
-            </div>
+            </a>
           ))}
         </div>
-
-      
 
       </div>
     </section>

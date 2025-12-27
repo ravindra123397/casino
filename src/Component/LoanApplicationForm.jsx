@@ -336,14 +336,7 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
     }
   }, []);
 
-  /* 🔹 PAN SCORE GENERATOR (ONE TIME ONLY) */
-  const generatePanScore = () => {
-    if (panScore) return;
-
-    const score = Math.floor(Math.random() * (900 - 300 + 1)) + 300;
-    setPanScore(score);
-    localStorage.setItem(PAN_SCORE_KEY, score);
-  };
+ 
 
   return (
     <div className="space-y-4">
@@ -384,7 +377,7 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
 
       {/* PAN NUMBER */}
       <Input
-        label="PAN Number"
+        label="PAN Number (600+ credit score is mandatory)"
         placeholder="ABCDE1234F"
         onChange={(e) =>
           setFormData({
@@ -394,34 +387,7 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
         }
       />
 
-      {/* PAN SCORE CHECK */}
-      <div className="bg-gray-50 border rounded-xl p-4">
-        <label className="label">PAN Score</label>
-
-        {!panScore ? (
-          <button
-            onClick={generatePanScore}
-            className="btn-primary w-full"
-          >
-            Check PAN Score
-          </button>
-        ) : (
-          <div className="text-center mt-3">
-            <p className="text-xs text-gray-500">Your PAN Score</p>
-            <p
-              className={`text-3xl font-bold ${
-                panScore >= 700
-                  ? "text-green-600"
-                  : panScore >= 500
-                  ? "text-yellow-500"
-                  : "text-red-500"
-              }`}
-            >
-              {panScore}
-            </p>
-          </div>
-        )}
-      </div>
+     
 
       {/* PAN FILE */}
       <FileInput
@@ -457,10 +423,10 @@ const StepThree = ({ formData, setFormData, onBack, onSubmit }) => (
       onChange={(e) => setFormData({ ...formData, bookType: e.target.value })}
     >
       <option value="">Select Exchange</option>
-      <option>Mahakal Book</option>
-      <option>Diamond999</option>
-      <option>All Panel</option>
-      <option>King Exchange</option>
+      <option>Saffron exchange </option>
+      <option>All panel exchange </option>
+      <option>Fair Bet7</option>
+      
     </select>
 
     <div className="flex gap-3">

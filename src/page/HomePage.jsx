@@ -25,7 +25,7 @@ const HomePage = () => {
         <DownloadAppSection />
       </section>
       {/* EXCHANGE */}
-      <section id="cricket-section">
+      <section id="exchanges">
         <TopGames />
       </section>
 

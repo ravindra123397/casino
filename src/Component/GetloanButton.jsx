@@ -38,6 +38,7 @@ const GetloanButton = () => {
               hover:scale-105
               active:scale-95
               rounded-xl
+              cursor-pointer
             "
           >
             Play Casino on Loan
@@ -55,6 +56,7 @@ const GetloanButton = () => {
               border-2 border-white
               bg-transparent
               rounded-xl
+              cursor-pointer
               transition-all duration-300
               hover:bg-white hover:text-red-600
             "

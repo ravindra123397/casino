@@ -33,7 +33,7 @@ const Navbar = () => {
               className="
                 bg-red-600 hover:bg-red-700 active:bg-red-800
                 text-black font-semibold text-sm px-14 py-2
-                rounded-md transition
+                rounded-md transition cursor-pointer
               "
             >
               Get a Credit

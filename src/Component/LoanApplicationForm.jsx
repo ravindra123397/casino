@@ -9,6 +9,7 @@ import {
   applyLoanThunk,
   checkLoanStatusThunk,
   resetLoanFlow,
+  getLoanDetailsByIdThunk,
 } from "../Store/Slice/loanFlowSlice";
 
 /* ===================== MAIN ===================== */
@@ -77,13 +78,29 @@ const LoanApplicationForm = () => {
   };
 
   /* ================= APPLY LOAN ================= */
-  const submitLoan = () => {
-    const fd = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (formData[key]) fd.append(key, formData[key]);
+const submitLoan = () => {
+  const fd = new FormData();
+
+  fd.append("firstName", formData.firstName);
+  fd.append("lastName", formData.lastName);
+  fd.append("phone", formData.phone);
+  fd.append("amount", formData.amount);
+  fd.append("panNumber", formData.panNumber);
+  fd.append("bookType", formData.bookType);
+
+  if (formData.aadhaarFront) fd.append("aadhaarFront", formData.aadhaarFront);
+  if (formData.aadhaarBack) fd.append("aadhaarBack", formData.aadhaarBack);
+  if (formData.panFile) fd.append("panFile", formData.panFile);
+
+  dispatch(applyLoanThunk(fd))
+    .unwrap()
+    .then((res) => {
+      if (res?.loanId) {
+        dispatch(getLoanDetailsByIdThunk(res.loanId));
+      }
     });
-    dispatch(applyLoanThunk(fd));
-  };
+};
+
 
   /* ================= POLLING (AUTO STOP) ================= */
   useEffect(() => {

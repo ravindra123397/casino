@@ -5,6 +5,7 @@ import {
   VERIFY_OTP,
   APPLY_LOAN,
   CHECK_LOAN_STATUS,
+  GET_LOAN_DETAILS,
 } from "../../api/constant/constant";
 
 /* ================= SEND OTP ================= */
@@ -14,8 +15,8 @@ export const sendOtpThunk = createAsyncThunk(
     try {
       const res = await axiosInstance.post(SEND_OTP, { phone });
       return res.data;
-    } catch {
-      return rejectWithValue("OTP send failed");
+    } catch (err) {
+      return rejectWithValue(err?.response?.data?.message || "OTP send failed");
     }
   }
 );
@@ -26,10 +27,9 @@ export const verifyOtpThunk = createAsyncThunk(
   async ({ phone, code }, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.post(VERIFY_OTP, { phone, code });
-      return res.data; 
-      // expected: { firstName } OR {}
-    } catch {
-      return rejectWithValue("Invalid OTP");
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err?.response?.data?.message || "Invalid OTP");
     }
   }
 );
@@ -42,14 +42,31 @@ export const applyLoanThunk = createAsyncThunk(
       const res = await axiosInstance.post(APPLY_LOAN, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      return res.data;
-    } catch {
-      return rejectWithValue("Loan submission failed");
+      return res.data; // { message, loanId }
+    } catch (err) {
+      return rejectWithValue(
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        "Loan submission failed"
+      );
     }
   }
 );
 
-/* ================= CHECK STATUS ================= */
+/* ================= LOAN DETAILS ================= */
+export const getLoanDetailsByIdThunk = createAsyncThunk(
+  "loan/detailsById",
+  async (loanId, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(GET_LOAN_DETAILS(loanId));
+      return res.data;
+    } catch {
+      return rejectWithValue("Failed to fetch loan details");
+    }
+  }
+);
+
+/* ================= STATUS ================= */
 export const checkLoanStatusThunk = createAsyncThunk(
   "loan/status",
   async (phone, { rejectWithValue }) => {
@@ -71,8 +88,9 @@ const loanFlowSlice = createSlice({
     otpVerified: false,
     loanSubmitted: false,
 
-    loanStatus: "IDLE", // IDLE | PENDING | APPROVED | REJECTED
+    loanStatus: "IDLE",
     statusResult: null,
+    lastLoanId: null,
 
     sendingOtp: false,
     verifyingOtp: false,
@@ -86,17 +104,14 @@ const loanFlowSlice = createSlice({
       state.otpSent = false;
       state.otpVerified = false;
       state.loanSubmitted = false;
-
       state.loanStatus = "IDLE";
       state.statusResult = null;
-
+      state.lastLoanId = null;
       state.sendingOtp = false;
       state.verifyingOtp = false;
       state.loading = false;
-
       state.error = null;
 
-      // ✅ CLEAR FIRST NAME
       localStorage.removeItem("username");
     },
   },
@@ -104,7 +119,7 @@ const loanFlowSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      /* ================= SEND OTP ================= */
+      /* SEND OTP */
       .addCase(sendOtpThunk.pending, (s) => {
         s.sendingOtp = true;
         s.error = null;
@@ -118,7 +133,7 @@ const loanFlowSlice = createSlice({
         s.error = a.payload;
       })
 
-      /* ================= VERIFY OTP ================= */
+      /* VERIFY OTP */
       .addCase(verifyOtpThunk.pending, (s) => {
         s.verifyingOtp = true;
         s.error = null;
@@ -127,44 +142,43 @@ const loanFlowSlice = createSlice({
         s.verifyingOtp = false;
         s.otpVerified = true;
 
-        // ✅ SAVE ONLY FIRST NAME
         const firstName = a.payload?.firstName?.trim();
-
-        if (firstName) {
-          localStorage.setItem("username", firstName);
-        }
+        if (firstName) localStorage.setItem("username", firstName);
       })
       .addCase(verifyOtpThunk.rejected, (s, a) => {
         s.verifyingOtp = false;
         s.error = a.payload;
       })
 
-      /* ================= APPLY LOAN ================= */
+      /* APPLY LOAN */
       .addCase(applyLoanThunk.pending, (s) => {
         s.loading = true;
         s.loanStatus = "PENDING";
+        s.error = null;
       })
-      .addCase(applyLoanThunk.fulfilled, (s) => {
+      .addCase(applyLoanThunk.fulfilled, (s, a) => {
         s.loading = false;
         s.loanSubmitted = true;
+        s.loanStatus = "PENDING";
+        s.lastLoanId = a.payload?.loanId;
       })
       .addCase(applyLoanThunk.rejected, (s, a) => {
         s.loading = false;
         s.error = a.payload;
       })
 
-      /* ================= ADMIN STATUS ================= */
-      .addCase(checkLoanStatusThunk.pending, (s) => {
-        s.loading = true;
-      })
-      .addCase(checkLoanStatusThunk.fulfilled, (s, a) => {
-        s.loading = false;
-        s.loanStatus = a.payload.status;
+      /* LOAN DETAILS */
+      .addCase(getLoanDetailsByIdThunk.fulfilled, (s, a) => {
         s.statusResult = a.payload;
+
+        const firstName = a.payload?.firstName?.trim();
+        if (firstName) localStorage.setItem("username", firstName);
       })
-      .addCase(checkLoanStatusThunk.rejected, (s, a) => {
-        s.loading = false;
-        s.error = a.payload;
+
+      /* STATUS */
+      .addCase(checkLoanStatusThunk.fulfilled, (s, a) => {
+        s.loanStatus = a.payload?.status;
+        s.statusResult = a.payload;
       });
   },
 });

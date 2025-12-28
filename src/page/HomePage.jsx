@@ -9,6 +9,7 @@ import PaymentMethods from "../Component/PaymentMethods";
 import MobileTabs from "../Component/MobileTabs";
 import PlayCasinoLoanButton from "../Component/PlayCasinoLoanButton";
 import Mahakal from "../Component/Mahakal";
+import Photo from "../Component/Photo";
 
 const HomePage = () => {
   return (
@@ -87,7 +88,9 @@ const HomePage = () => {
 
         </div>
       </section>
-
+      < div className="mt-10">
+        <Photo />
+      </div>
 
       <CasinoInfoContent />
 

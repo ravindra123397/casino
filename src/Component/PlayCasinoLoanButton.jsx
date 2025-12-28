@@ -11,6 +11,7 @@ const PlayCasinoLoanButton = ({ onClick, onWhatsAppClick }) => {
           className="
             inline-flex items-center justify-center
             px-6 py-4
+            whitespace-nowrap
             font-bold text-base
             text-white
             bg-red-600
@@ -25,26 +26,23 @@ const PlayCasinoLoanButton = ({ onClick, onWhatsAppClick }) => {
         </button>
 
         {/* ⚪ TAKE ID DIRECTLY */}
-        <div className="flex flex-col items-center">
-          <button
-            onClick={onWhatsAppClick}
-            className="
-              inline-flex items-center justify-center
-              px-5 py-4
-              font-bold text-base
-              text-red-600
-              border-2 border-white
-              bg-transparent
-              rounded-xl
-              transition-all duration-300
-              hover:bg-white hover:text-red-600
-            "
-          >
-            Take ID Directly
-          </button>
-
-         
-        </div>
+        <button
+          onClick={onWhatsAppClick}
+          className="
+            inline-flex items-center justify-center
+            px-5 py-4
+            whitespace-nowrap
+            font-bold text-base
+            text-red-600
+            border-2 border-white
+            bg-transparent
+            rounded-xl
+            transition-all duration-300
+            hover:bg-white hover:text-red-600
+          "
+        >
+          Take ID Directly
+        </button>
 
       </div>
     </div>
@@ -52,3 +50,4 @@ const PlayCasinoLoanButton = ({ onClick, onWhatsAppClick }) => {
 };
 
 export default PlayCasinoLoanButton;
+  

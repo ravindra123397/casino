@@ -26,7 +26,8 @@ export const verifyOtpThunk = createAsyncThunk(
   async ({ phone, code }, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.post(VERIFY_OTP, { phone, code });
-      return res.data;
+      return res.data; 
+      // expected: { firstName } OR {}
     } catch {
       return rejectWithValue("Invalid OTP");
     }
@@ -54,7 +55,7 @@ export const checkLoanStatusThunk = createAsyncThunk(
   async (phone, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(CHECK_LOAN_STATUS(phone));
-      return res.data; // { status, amountRequested, message, restartReasons }
+      return res.data;
     } catch {
       return rejectWithValue("Failed to fetch loan status");
     }
@@ -71,9 +72,8 @@ const loanFlowSlice = createSlice({
     loanSubmitted: false,
 
     loanStatus: "IDLE", // IDLE | PENDING | APPROVED | REJECTED
-    statusResult: null, // ✅ FULL STATUS RESPONSE
+    statusResult: null,
 
-    /* LOADERS */
     sendingOtp: false,
     verifyingOtp: false,
     loading: false,
@@ -95,6 +95,9 @@ const loanFlowSlice = createSlice({
       state.loading = false;
 
       state.error = null;
+
+      // ✅ CLEAR FIRST NAME
+      localStorage.removeItem("username");
     },
   },
 
@@ -120,9 +123,16 @@ const loanFlowSlice = createSlice({
         s.verifyingOtp = true;
         s.error = null;
       })
-      .addCase(verifyOtpThunk.fulfilled, (s) => {
+      .addCase(verifyOtpThunk.fulfilled, (s, a) => {
         s.verifyingOtp = false;
         s.otpVerified = true;
+
+        // ✅ SAVE ONLY FIRST NAME
+        const firstName = a.payload?.firstName?.trim();
+
+        if (firstName) {
+          localStorage.setItem("username", firstName);
+        }
       })
       .addCase(verifyOtpThunk.rejected, (s, a) => {
         s.verifyingOtp = false;
@@ -150,7 +160,7 @@ const loanFlowSlice = createSlice({
       .addCase(checkLoanStatusThunk.fulfilled, (s, a) => {
         s.loading = false;
         s.loanStatus = a.payload.status;
-        s.statusResult = a.payload; // ✅ SAVE FULL RESPONSE
+        s.statusResult = a.payload;
       })
       .addCase(checkLoanStatusThunk.rejected, (s, a) => {
         s.loading = false;

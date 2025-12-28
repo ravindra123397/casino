@@ -328,16 +328,6 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
   const PAN_SCORE_KEY = "pan_score_value";
   const [panScore, setPanScore] = useState(null);
 
-  /* 🔹 LOAD PAN SCORE FROM LOCALSTORAGE (ONCE) */
-  useEffect(() => {
-    const savedScore = localStorage.getItem(PAN_SCORE_KEY);
-    if (savedScore) {
-      setPanScore(Number(savedScore));
-    }
-  }, []);
-
- 
-
   return (
     <div className="space-y-4">
 
@@ -391,7 +381,7 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
       />
 
 
-     
+
 
       {/* PAN FILE */}
       <FileInput
@@ -409,7 +399,6 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
         <button
           onClick={onNext}
           className="btn-primary w-1/2"
-          disabled={!panScore}
         >
           Continue
         </button>
@@ -430,7 +419,7 @@ const StepThree = ({ formData, setFormData, onBack, onSubmit }) => (
       <option>Saffron exchange </option>
       <option>All panel exchange </option>
       <option>Fair Bet7</option>
-      
+
     </select>
 
     <div className="flex gap-3">
@@ -466,7 +455,7 @@ const StepFour = ({ loanData, phone }) => {
 
       {/* 🔊 LIVE MESSAGE */}
       <div className="bg-red-100 rounded-xl p-3 text-xs text-center mb-4">
-        🔊 {maskedPhone} successfully borrowing ₹{loanAmount.toLocaleString()}
+        Pay your EMI on time so it will not impact you CIBIL Score
       </div>
 
       {/* LOAN DETAILS */}
@@ -474,16 +463,16 @@ const StepFour = ({ loanData, phone }) => {
         <Row label="Loan Amount" value={`₹${loanAmount.toLocaleString()}`} />
         <Row label="Loan Term" value={`${days} Days`} />
         <Row
-          label="Daily EMI (1% Interest)"
+          label="Daily EMI"
           value={`₹${dailyEmi.toLocaleString()}`}
         />
         <Row
-          label="Total Interest (100 Days)"
+          label="Total Payable"
           value={`₹${totalInterest.toLocaleString()}`}
           red
         />
         <Row
-          label="Processing Fee (11%)"
+          label="Processing Fee + Interest + GST "
           value={`₹${processingFee.toLocaleString()}`}
           red
         />
@@ -491,9 +480,7 @@ const StepFour = ({ loanData, phone }) => {
 
       {/* USER INFO MESSAGE */}
       <div className="mt-4 bg-yellow-50 border border-yellow-300 rounded-xl p-3 text-xs text-center">
-        ✅ Aapke selected amount ka <b>5%</b> deduction ke baad
-        <br />
-        <b>₹{netCredit.toLocaleString()}</b> aapke account me transfer kiya jayega.
+        Processing fee + gst + interest payable in advance . Process the loan
       </div>
 
       <button className="mt-5 w-full bg-red-500 text-white py-3 rounded-full font-bold">
@@ -588,8 +575,8 @@ const FileInput = ({ label, ...props }) => (
 );
 
 const Footer = () => (
-  <div className="text-center text-[10px] text-gray-400 mt-6 pb-4">
-    Regulated by RBI · SSA Finserv Pvt Ltd
+  <div className="text-center text-[18px] text-gray-400 mt-6 pb-4">
+    Regulated by RBI · Sawariya fin pvt
   </div>
 );
 

@@ -4,7 +4,7 @@ import PlayCasinoLoanButton from "./PlayCasinoLoanButton";
 
 const DownloadAppSection = () => {
   return (
-    <section className="w-full bg-[#0b1622] py-24 px-4 ">
+    <section className="w-full bg-[#0b1622] py-20 px-4 ">
       <div className="max-w-7xl mx-auto rounded-2xl overflow-hidden">
 
         {/* FULL WIDTH IMAGE */}
@@ -18,7 +18,7 @@ const DownloadAppSection = () => {
             rounded-2xl
           "
         />
-        <div className="mt-11">
+        <div className="mt-7">
           <PlayCasinoLoanButton />
         </div>
 

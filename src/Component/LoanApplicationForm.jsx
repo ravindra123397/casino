@@ -325,7 +325,7 @@ const LoanSteps = ({ step }) => (
 
 /* ===================== STEP 2 ===================== */
 const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
-    const PAN_SCORE_KEY = "pan_score_value";
+  const PAN_SCORE_KEY = "pan_score_value";
   const [panScore, setPanScore] = useState(null);
 
   /* 🔹 LOAD PAN SCORE FROM LOCALSTORAGE (ONCE) */
@@ -379,13 +379,17 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
       <Input
         label="PAN Number (600+ credit score is mandatory)"
         placeholder="ABCDE1234F"
+        value={formData.panNumber}
         onChange={(e) =>
           setFormData({
             ...formData,
-            panNumber: e.target.value.toUpperCase(),
+            panNumber: e.target.value
+              .toUpperCase()   // ✅ CAPITAL
+              .replace(/\s/g, "") // ✅ NO SPACES
           })
         }
       />
+
 
      
 
@@ -446,7 +450,7 @@ const StepFour = ({ loanData, phone }) => {
   const dailyInterestRate = 0.01; // 1% daily
 
   const totalInterest = Math.round(loanAmount * dailyInterestRate * days);
-  const totalPayable = loanAmount + totalInterest;
+  const totalPayable = loanAmount;
   const dailyEmi = Math.round(totalPayable / days);
 
   const processingFee = Math.round((loanAmount * 11) / 100);

@@ -592,8 +592,8 @@ const FileInput = ({ label, ...props }) => (
 );
 
 const Footer = () => (
-  <div className="text-center text-[18px] text-gray-400 mt-6 pb-4">
-    Regulated by RBI · Sawariya fin pvt
+  <div className="text-center text-[10px] text-gray-400 mt-6 pb-4">
+    Regulated by RBI · Sanwariya fin pvt.
   </div>
 );
 

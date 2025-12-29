@@ -342,8 +342,7 @@ const LoanSteps = ({ step }) => (
 
 /* ===================== STEP 2 ===================== */
 const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
-  const PAN_SCORE_KEY = "pan_score_value";
-  const [panScore, setPanScore] = useState(null);
+ 
 
   return (
     <div className="space-y-4">

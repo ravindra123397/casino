@@ -340,8 +340,7 @@ const LoanSteps = ({ step }) => (
 
 /* ===================== STEP 2 ===================== */
 const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
-  const PAN_SCORE_KEY = "pan_score_value";
-  const [panScore, setPanScore] = useState(null);
+ 
 
   return (
     <div className="space-y-4">
@@ -646,8 +645,8 @@ const FileInput = ({ label, ...props }) => (
 
 
 const Footer = () => (
-  <div className="text-center text-[18px] text-gray-400 mt-6 pb-4">
-    Regulated by RBI · Sawariya fin pvt
+  <div className="text-center text-[10px] text-gray-400 mt-6 pb-4">
+    Regulated by RBI · Sanwariya fin pvt.
   </div>
 );
 

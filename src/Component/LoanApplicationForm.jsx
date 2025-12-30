@@ -9,24 +9,27 @@ import {
   applyLoanThunk,
   checkLoanStatusThunk,
   resetLoanFlow,
-  getLoanDetailsByIdThunk,
+  setPhone,
 } from "../Store/Slice/loanFlowSlice";
 
-/* ===================== MAIN ===================== */
 const LoanApplicationForm = () => {
   const dispatch = useDispatch();
 
   const {
+    phone,
     otpSent,
-    loanSubmitted,
     loanStatus,
     statusResult,
-
     sendingOtp,
     verifyingOtp,
     loading,
     error,
   } = useSelector((s) => s.loanFlow);
+
+  const loanApplied =
+    loanStatus === "PENDING" ||
+    loanStatus === "APPROVED" ||
+    loanStatus === "RESTART";
 
   const [step, setStep] = useState(1);
   const [showRestartPopup, setShowRestartPopup] = useState(false);
@@ -39,201 +42,190 @@ const LoanApplicationForm = () => {
     amount: 50000,
     aadhaarFront: null,
     aadhaarBack: null,
-    panNumber: "",
     panFile: null,
+    panNumber: "",
+    upiId: "",
     bookType: "",
   });
 
   const otpRefs = useRef([]);
 
-  /* ================= OTP INPUT ================= */
-  const handleOtpChange = (value, index) => {
-    if (!/^\d?$/.test(value)) return;
+  /* ================= RESTORE PHONE ================= */
+  useEffect(() => {
+    const savedPhone = localStorage.getItem("loan_phone");
+    if (!savedPhone) return;
+
+    dispatch(setPhone(savedPhone));
+    dispatch(checkLoanStatusThunk(savedPhone));
+
+    setFormData((p) => ({ ...p, phone: savedPhone }));
+  }, [dispatch]);
+
+  /* ================= HYDRATE TEXT FIELDS ================= */
+  useEffect(() => {
+    if (!statusResult) return;
+
+    setFormData((p) => ({
+      ...p,
+      firstName: statusResult.firstName ?? p.firstName,
+      lastName: statusResult.lastName ?? p.lastName,
+      phone: statusResult.phone ?? p.phone,
+      amount: statusResult.amountRequested ?? p.amount,
+      panNumber: statusResult.panNumber ?? p.panNumber,
+      bookType: statusResult.bookType ?? p.bookType,
+    }));
+  }, [statusResult]);
+
+  /* ================= STEP CONTROL ================= */
+  useEffect(() => {
+    if (!loanApplied) return;
+
+    if (loanStatus === "APPROVED") setStep(4);
+    else if (loanStatus === "RESTART") {
+      setStep(2);
+      setShowRestartPopup(true);
+    } else if (loanStatus === "PENDING") setStep(1);
+  }, [loanApplied, loanStatus]);
+
+  /* ================= POLLING ================= */
+  useEffect(() => {
+    if (!loanApplied || loanStatus !== "PENDING" || !phone) return;
+
+    const t = setInterval(() => {
+      dispatch(checkLoanStatusThunk(phone));
+    }, 5000);
+
+    return () => clearInterval(t);
+  }, [loanApplied, loanStatus, phone, dispatch]);
+
+  /* ================= OTP ================= */
+  const handleOtpChange = (v, i) => {
+    if (!/^\d?$/.test(v)) return;
     const otp = [...formData.otp];
-    otp[index] = value;
+    otp[i] = v;
     setFormData({ ...formData, otp });
-    if (value && index < 3) otpRefs.current[index + 1]?.focus();
+    if (v && i < 3) otpRefs.current[i + 1]?.focus();
   };
 
-  /* ================= SEND OTP ================= */
   const sendOtp = () => {
     if (!/^[6-9]\d{9}$/.test(formData.phone)) {
-      alert("Invalid phone number");
+      alert("Invalid phone");
       return;
     }
+    localStorage.setItem("loan_phone", formData.phone);
+    dispatch(setPhone(formData.phone));
     dispatch(sendOtpThunk(formData.phone));
   };
 
-  /* ================= VERIFY OTP ================= */
   const verifyOtp = () => {
-    const code = formData.otp.join("");
     dispatch(
       verifyOtpThunk({
         phone: formData.phone,
-        code,
+        code: formData.otp.join(""),
       })
-    )
-      .unwrap()
-      .then(() => setStep(2));
+    ).then((r) => {
+      if (!r.error) setStep(2);
+    });
   };
 
   /* ================= APPLY LOAN ================= */
-const submitLoan = () => {
-  const fd = new FormData();
+  const submitLoan = () => {
+    const fd = new FormData();
 
-  fd.append("firstName", formData.firstName);
-  fd.append("lastName", formData.lastName);
-  fd.append("phone", formData.phone);
-  fd.append("amount", formData.amount);
-  fd.append("panNumber", formData.panNumber);
-  fd.append("bookType", formData.bookType);
+    fd.append("firstName", formData.firstName);
+    fd.append("lastName", formData.lastName);
+    fd.append("phone", formData.phone);
+    fd.append("amount", formData.amount);
+    fd.append("panNumber", formData.panNumber);
+    fd.append("upiId", formData.upiId);
+    fd.append("bookType", formData.bookType);
 
-  if (formData.aadhaarFront) fd.append("aadhaarFront", formData.aadhaarFront);
-  if (formData.aadhaarBack) fd.append("aadhaarBack", formData.aadhaarBack);
-  if (formData.panFile) fd.append("panFile", formData.panFile);
+    if (formData.aadhaarFront instanceof File)
+      fd.append("aadhaarFront", formData.aadhaarFront);
 
-  dispatch(applyLoanThunk(fd))
-    .unwrap()
-    .then((res) => {
-      if (res?.loanId) {
-        dispatch(getLoanDetailsByIdThunk(res.loanId));
-      }
-    });
-};
+    if (formData.aadhaarBack instanceof File)
+      fd.append("aadhaarBack", formData.aadhaarBack);
 
+    if (formData.panFile instanceof File)
+      fd.append("panFile", formData.panFile);
 
-  /* ================= POLLING (AUTO STOP) ================= */
-  useEffect(() => {
-    if (!loanSubmitted || loanStatus !== "PENDING") return;
-
-    const timer = setInterval(() => {
-      dispatch(checkLoanStatusThunk(formData.phone));
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, [loanSubmitted, loanStatus, dispatch, formData.phone]);
-
-  /* ================= RESTART POPUP TRIGGER ================= */
-  useEffect(() => {
-    if (loanStatus === "RESTART" && statusResult) {
-      setShowRestartPopup(true);
-    }
-  }, [loanStatus, statusResult]);
-
-  /* ================= RESTART HANDLER ================= */
-  const handleRestartForm = () => {
-    setShowRestartPopup(false);
-    setStep(1);
-
-    setFormData({
-      firstName: "",
-      lastName: "",
-      phone: "",
-      otp: ["", "", "", ""],
-      amount: 50000,
-      aadhaarFront: null,
-      aadhaarBack: null,
-      panNumber: "",
-      panFile: null,
-      bookType: "",
-    });
-
-    dispatch(resetLoanFlow());
+    dispatch(applyLoanThunk(fd));
   };
 
-  /* ================= UI ================= */
+  const handleRestartForm = () => {
+    dispatch(resetLoanFlow());
+    dispatch(setPhone(formData.phone));
+    localStorage.setItem("loan_phone", formData.phone);
+    setShowRestartPopup(false);
+    setStep(2);
+  };
+
   return (
     <>
       <Navbar />
 
       <div className="min-h-screen bg-[#f5f6fa] flex justify-center px-3 pt-20">
-        <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg overflow-hidden">
+        <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg">
 
-          <Header />
-          <AmountCard amount={formData.amount} />
+          <Header /> 
+          <AmountCard amount={formData.amount} /> 
           <LoanSteps step={step} />
+<div className="px-4 mt-4">
 
-          <div className="px-4 mt-4 space-y-3">
 
-            {/* LOAN SUBMIT LOADER */}
-            {loading && step === 3 && (
-              <StepLoader text="Submitting loan..." />
-            )}
+          {step === 1 && (
+            <StepOne
+              formData={formData}
+              setFormData={setFormData}
+              sendOtp={sendOtp}
+              sendingOtp={sendingOtp}
+              otpSent={otpSent}
+              otpRefs={otpRefs}
+              handleOtpChange={handleOtpChange}
+              verifyOtp={verifyOtp}
+              verifyingOtp={verifyingOtp}
+            />
+          )}
 
-            {/* STEP 1 */}
-            {!loading && step === 1 && (
-              <StepOne
-                formData={formData}
-                setFormData={setFormData}
-                sendOtp={sendOtp}
-                sendingOtp={sendingOtp}
-                otpSent={otpSent}
-                otpRefs={otpRefs}
-                handleOtpChange={handleOtpChange}
-                verifyOtp={verifyOtp}
-                verifyingOtp={verifyingOtp}
-              />
-            )}
+          {step === 2 && (
+            <StepTwo
+              formData={formData}
+              setFormData={setFormData}
+              onBack={() => setStep(1)}
+              onNext={() => setStep(3)}
+            />
+          )}
 
-            {/* STEP 2 */}
-            {!loading && step === 2 && (
-              <StepTwo
-                formData={formData}
-                setFormData={setFormData}
-                onBack={() => setStep(1)}
-                onNext={() => setStep(3)}
-              />
-            )}
+          {step === 3 && (
+            <StepThree
+              formData={formData}
+              setFormData={setFormData}
+              onBack={() => setStep(2)}
+              onSubmit={submitLoan}
+            />
+          )}
 
-            {/* STEP 3 */}
-            {!loading && step === 3 && (
-              <StepThree
-                formData={formData}
-                setFormData={setFormData}
-                onBack={() => setStep(2)}
-                onSubmit={submitLoan}
-              />
-            )}
+          {step === 4 && loanStatus === "APPROVED" && (
+            <StepFour loanData={statusResult} phone={formData.phone} />
+          )}
 
-            {/* ADMIN PENDING */}
-            {loanSubmitted && loanStatus === "PENDING" && <FinalLoader />}
+          {loading && <p className="text-center text-sm">Processing...</p>}
 
-            {/* APPROVED */}
-            {loanStatus === "APPROVED" && statusResult && (
-              <StepFour
-                loanData={statusResult}
-                phone={formData.phone}
-              />
-            )}
-
-            {/* REJECTED */}
-            {loanStatus === "REJECTED" && (
-              <div className="p-4 text-center">
-                <h2 className="text-red-600 font-bold text-lg">
-                  ❌ Loan Rejected
-                </h2>
-                <p className="text-sm mt-2">
-                  Your loan was rejected by admin.
-                </p>
-              </div>
-            )}
-
-            {error && (
-              <p className="text-center text-red-500 text-xs">{error}</p>
-            )}
-          </div>
-
+          {/* 🔥 ERROR ONLY WHEN NO LOAN */}
+          {error && loanStatus === "IDLE" && (
+            <p className="text-center text-red-500 text-xs">{error}</p>
+          )}
           <Footer />
         </div>
-
         <MobileTabs />
         <GlobalStyles />
       </div>
 
-      {/* 🔥 RESTART POPUP */}
+      </div>
+
       <RestartModal
         open={showRestartPopup}
-        message={statusResult?.message}
+        message={statusResult?.userMessage}
         reasons={statusResult?.restartReasons}
         onRestart={handleRestartForm}
         onClose={() => setShowRestartPopup(false)}
@@ -243,6 +235,12 @@ const submitLoan = () => {
 };
 
 export default LoanApplicationForm;
+
+
+
+
+
+
 
 
 
@@ -337,7 +335,7 @@ const LoanSteps = ({ step }) => (
   </div>
 );
 
-/* ===================== STEP 1 ===================== */
+
 
 
 /* ===================== STEP 2 ===================== */
@@ -371,14 +369,21 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
       <FileInput
         label="Aadhar Front"
         onChange={(e) =>
-          setFormData({ ...formData, aadhaarFront: e.target.files[0] })
+          setFormData({
+            ...formData,
+            aadhaarFront: e.target.files[0], // ✅ File
+          })
         }
       />
+
 
       <FileInput
         label="Aadhar Back"
         onChange={(e) =>
-          setFormData({ ...formData, aadhaarBack: e.target.files[0] })
+          setFormData({
+            ...formData,
+            aadhaarBack: e.target.files[0], // ✅ File
+          })
         }
       />
 
@@ -404,9 +409,13 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
       <FileInput
         label="PAN Upload"
         onChange={(e) =>
-          setFormData({ ...formData, panFile: e.target.files[0] })
+          setFormData({
+            ...formData,
+            panFile: e.target.files[0], // ✅ File
+          })
         }
       />
+
 
       {/* ACTION BUTTONS */}
       <div className="flex gap-3">
@@ -424,29 +433,68 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
   );
 };
 
+
 /* ===================== STEP 3 ===================== */
-const StepThree = ({ formData, setFormData, onBack, onSubmit }) => (
-  <div className="space-y-4">
-    <select
-      className="input"
-      value={formData.bookType}
-      onChange={(e) => setFormData({ ...formData, bookType: e.target.value })}
-    >
-      <option value="">Select Exchange</option>
-      <option>Saffron exchange </option>
-      <option>All panel exchange </option>
-      <option>Fair Bet7</option>
+const StepThree = ({ formData, setFormData, onBack, onSubmit }) => {
+  const isValidUpi = /^[\w.-]{2,256}@[a-zA-Z]{2,64}$/.test(formData.upiId);
 
-    </select>
+  return (
+    <div className="space-y-4">
 
-    <div className="flex gap-3">
-      <button onClick={onBack} className="btn-secondary w-1/2">Back</button>
-      <button disabled={!formData.bookType} onClick={onSubmit} className="btn-success w-1/2">
-        Submit
-      </button>
+      {/* EXCHANGE SELECT */}
+      <select
+        className="input"
+        value={formData.bookType}
+        onChange={(e) =>
+          setFormData({ ...formData, bookType: e.target.value })
+        }
+      >
+        <option value="">Select Exchange</option>
+        <option value="Saffron Exchange">Saffron Exchange</option>
+        <option value="All Panel Exchange">All Panel Exchange</option>
+        <option value="Fair Bet7">Fair Bet7</option>
+      </select>
+
+      {/* ✅ UPI ID */}
+      <Input
+        label="UPI ID (for loan credit)"
+        placeholder="example@upi"
+        value={formData.upiId}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            upiId: e.target.value.toLowerCase().replace(/\s/g, ""),
+          })
+        }
+      />
+
+      {!isValidUpi && formData.upiId && (
+        <p className="text-xs text-red-500">
+          Please enter a valid UPI ID
+        </p>
+      )}
+
+      {/* ACTION BUTTONS */}
+      <div className="flex gap-3">
+        <button
+          onClick={onBack}
+          className="btn-secondary w-1/2"
+        >
+          Back
+        </button>
+
+        <button
+          disabled={!formData.bookType || !isValidUpi}
+          onClick={onSubmit}
+          className="btn-success w-1/2"
+        >
+          Submit
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
 
 /* ===================== STEP 4 (FINAL) ===================== */
 const StepFour = ({ loanData, phone }) => {
@@ -587,9 +635,15 @@ const Input = ({ label, ...props }) => (
 const FileInput = ({ label, ...props }) => (
   <div>
     <label className="label">{label}</label>
-    <input type="file" className="input" {...props} />
+    <input
+      type="file"
+      className="input"
+      accept="image/*"
+      {...props}
+    />
   </div>
 );
+
 
 const Footer = () => (
   <div className="text-center text-[18px] text-gray-400 mt-6 pb-4">

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllLoansThunk,
   approveLoanThunk,
-  rejectLoanThunk,
+  restartLoanThunk,
   getLoanDetailsThunk,
 } from "../Store/Slice/loanSlice";
 
@@ -76,23 +76,24 @@ const AdminDashboard = () => {
     );
   };
 
-  const confirmReject = () => {
-    if (selectedReasons.length === 0) {
-      alert("Please select at least one reason");
-      return;
-    }
+ const confirmReject = () => {
+  if (selectedReasons.length === 0) {
+    alert("Please select at least one reason");
+    return;
+  }
 
-    dispatch(
-      rejectLoanThunk({
-        loanId: activeLoanId,
-        reasons: selectedReasons,
-      })
-    );
+  dispatch(
+    restartLoanThunk({
+      loanId: activeLoanId,
+      reasons: selectedReasons,
+    })
+  );
 
-    setOpenRejectDialog(false);
-    setActiveLoanId(null);
-    setSelectedReasons([]);
-  };
+  setOpenRejectDialog(false);
+  setActiveLoanId(null);
+  setSelectedReasons([]);
+};
+
 
   if (loading) {
     return <Typography sx={{ p: 3 }}>Loading loans...</Typography>;

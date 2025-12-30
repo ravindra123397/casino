@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const MobileTabs = () => {
+
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -61,6 +63,14 @@ const MobileTabs = () => {
     navigate("/complete-form");
   };
 
+  const handleProfile = () => {
+  if (!loanApproved) {
+    setShowProfileMsg(true);
+    return;
+  }
+  navigate("/profile");
+};
+
   return (
     <>
       {/* 🔴 LOAN PROCESS MESSAGE */}
@@ -105,16 +115,7 @@ const MobileTabs = () => {
           </button>
 
           {/* PROFILE (NO REDIRECT) */}
-          <button
-            onClick={() => {
-              if (!loanApproved) {
-                setShowProfileMsg(true);
-                return;
-              }
-              setShowNameTag((p) => !p);
-            }}
-            className="w-full flex justify-center"
-          >
+          <button onClick={handleProfile} className="w-full flex justify-center">
             <User size={22} />
           </button>
         </div>

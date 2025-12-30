@@ -12,6 +12,7 @@ import PrivateRoute from "./route/PrivateRoute";
 import AdminLayout from "./layout/AdminLayout";
 
 import "./App.css";
+import LoanProfile from "./Component/LoanProfile";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         {/* PUBLIC */}
         <Route path="/" element={<HomePage />} />
         <Route path="/complete-form" element={<LoanApplicationfrom />} />
-
+        <Route path="/profile" element={<LoanProfile />} />
         {/* AUTH */}
         <Route element={<PublicRoute />}>
           <Route path="/admin/login" element={<Login />} />

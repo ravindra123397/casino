@@ -1,5 +1,244 @@
+// import React, { useState, useRef, useEffect } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import Navbar from "./Navbar";
+// import MobileTabs from "./MobileTabs";
+
+// import {
+//   sendOtpThunk,
+//   verifyOtpThunk,
+//   applyLoanThunk,
+//   checkLoanStatusThunk,
+//   resetLoanFlow,
+//   setPhone,
+// } from "../Store/Slice/loanFlowSlice";
+
+// const LoanApplicationForm = () => {
+//   const dispatch = useDispatch();
+
+//   const {
+//     phone,
+//     otpSent,
+//     loanStatus,
+//     statusResult,
+//     sendingOtp,
+//     verifyingOtp,
+//     loading,
+//     error,
+//   } = useSelector((s) => s.loanFlow);
+
+//   const loanApplied =
+//     loanStatus === "PENDING" ||
+//     loanStatus === "APPROVED" ||
+//     loanStatus === "RESTART";
+
+//   const [step, setStep] = useState(1);
+//   const [showRestartPopup, setShowRestartPopup] = useState(false);
+
+//   const [formData, setFormData] = useState({
+//     firstName: "",
+//     lastName: "",
+//     phone: "",
+//     otp: ["", "", "", ""],
+//     amount: 50000,
+//     aadhaarFront: null,
+//     aadhaarBack: null,
+//     panFile: null,
+//     panNumber: "",
+//     upiId: "",
+//     bookType: "",
+//   });
+
+//   const otpRefs = useRef([]);
+
+//   /* ================= RESTORE PHONE ================= */
+//   useEffect(() => {
+//     const savedPhone = localStorage.getItem("loan_phone");
+//     if (!savedPhone) return;
+
+//     dispatch(setPhone(savedPhone));
+//     dispatch(checkLoanStatusThunk(savedPhone));
+
+//     setFormData((p) => ({ ...p, phone: savedPhone }));
+//   }, [dispatch]);
+
+//   /* ================= HYDRATE TEXT FIELDS ================= */
+//   useEffect(() => {
+//     if (!statusResult) return;
+
+//     setFormData((p) => ({
+//       ...p,
+//       firstName: statusResult.firstName ?? p.firstName,
+//       lastName: statusResult.lastName ?? p.lastName,
+//       phone: statusResult.phone ?? p.phone,
+//       amount: statusResult.amountRequested ?? p.amount,
+//       panNumber: statusResult.panNumber ?? p.panNumber,
+//       bookType: statusResult.bookType ?? p.bookType,
+//     }));
+//   }, [statusResult]);
+
+//   /* ================= STEP CONTROL ================= */
+//   useEffect(() => {
+//     if (!loanApplied) return;
+
+//     if (loanStatus === "APPROVED") setStep(4);
+//     else if (loanStatus === "RESTART") {
+//       setStep(2);
+//       setShowRestartPopup(true);
+//     } else if (loanStatus === "PENDING") setStep(1);
+//   }, [loanApplied, loanStatus]);
+
+//   /* ================= POLLING ================= */
+//   useEffect(() => {
+//     if (!loanApplied || loanStatus !== "PENDING" || !phone) return;
+
+//     const t = setInterval(() => {
+//       dispatch(checkLoanStatusThunk(phone));
+//     }, 5000);
+
+//     return () => clearInterval(t);
+//   }, [loanApplied, loanStatus, phone, dispatch]);
+
+//   /* ================= OTP ================= */
+//   const handleOtpChange = (v, i) => {
+//     if (!/^\d?$/.test(v)) return;
+//     const otp = [...formData.otp];
+//     otp[i] = v;
+//     setFormData({ ...formData, otp });
+//     if (v && i < 3) otpRefs.current[i + 1]?.focus();
+//   };
+
+//   const sendOtp = () => {
+//     if (!/^[6-9]\d{9}$/.test(formData.phone)) {
+//       alert("Invalid phone");
+//       return;
+//     }
+//     localStorage.setItem("loan_phone", formData.phone);
+//     dispatch(setPhone(formData.phone));
+//     dispatch(sendOtpThunk(formData.phone));
+//   };
+
+//   const verifyOtp = () => {
+//     dispatch(
+//       verifyOtpThunk({
+//         phone: formData.phone,
+//         code: formData.otp.join(""),
+//       })
+//     ).then((r) => {
+//       if (!r.error) setStep(2);
+//     });
+//   };
+
+//   /* ================= APPLY LOAN ================= */
+//   const submitLoan = () => {
+//     const fd = new FormData();
+
+//     fd.append("firstName", formData.firstName);
+//     fd.append("lastName", formData.lastName);
+//     fd.append("phone", formData.phone);
+//     fd.append("amount", formData.amount);
+//     fd.append("panNumber", formData.panNumber);
+//     fd.append("upiId", formData.upiId);
+//     fd.append("bookType", formData.bookType);
+
+//     if (formData.aadhaarFront instanceof File)
+//       fd.append("aadhaarFront", formData.aadhaarFront);
+
+//     if (formData.aadhaarBack instanceof File)
+//       fd.append("aadhaarBack", formData.aadhaarBack);
+
+//     if (formData.panFile instanceof File)
+//       fd.append("panFile", formData.panFile);
+
+//     dispatch(applyLoanThunk(fd));
+//   };
+
+//   const handleRestartForm = () => {
+//     dispatch(resetLoanFlow());
+//     dispatch(setPhone(formData.phone));
+//     localStorage.setItem("loan_phone", formData.phone);
+//     setShowRestartPopup(false);
+//     setStep(2);
+//   };
+
+//   return (
+//     <>
+//       <Navbar />
+
+//       <div className="min-h-screen bg-[#f5f6fa] flex justify-center px-3 pt-20">
+//         <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg">
+
+//           <Header /> 
+//           <AmountCard amount={formData.amount} /> 
+//           <LoanSteps step={step} />
+// <div className="px-4 mt-4">
+
+
+//           {step === 1 && (
+//             <StepOne
+//               formData={formData}
+//               setFormData={setFormData}
+//               sendOtp={sendOtp}
+//               sendingOtp={sendingOtp}
+//               otpSent={otpSent}
+//               otpRefs={otpRefs}
+//               handleOtpChange={handleOtpChange}
+//               verifyOtp={verifyOtp}
+//               verifyingOtp={verifyingOtp}
+//             />
+//           )}
+
+//           {step === 2 && (
+//             <StepTwo
+//               formData={formData}
+//               setFormData={setFormData}
+//               onBack={() => setStep(1)}
+//               onNext={() => setStep(3)}
+//             />
+//           )}
+
+//           {step === 3 && (
+//             <StepThree
+//               formData={formData}
+//               setFormData={setFormData}
+//               onBack={() => setStep(2)}
+//               onSubmit={submitLoan}
+//             />
+//           )}
+
+//           {step === 4 && loanStatus === "APPROVED" && (
+//             <StepFour loanData={statusResult} phone={formData.phone} />
+//           )}
+
+//           {loading && <p className="text-center text-sm">Processing...</p>}
+
+//           {/* 🔥 ERROR ONLY WHEN NO LOAN */}
+//           {error && loanStatus === "IDLE" && (
+//             <p className="text-center text-red-500 text-xs">{error}</p>
+//           )}
+//           <Footer />
+//         </div>
+//         <MobileTabs />
+//         <GlobalStyles />
+//       </div>
+
+//       </div>
+
+//       <RestartModal
+//         open={showRestartPopup}
+//         message={statusResult?.userMessage}
+//         reasons={statusResult?.restartReasons}
+//         onRestart={handleRestartForm}
+//         onClose={() => setShowRestartPopup(false)}
+//       />
+//     </>
+//   );
+// };
+
+// export default LoanApplicationForm;
+
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import MobileTabs from "./MobileTabs";
 
@@ -14,6 +253,7 @@ import {
 
 const LoanApplicationForm = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const {
     phone,
@@ -31,7 +271,11 @@ const LoanApplicationForm = () => {
     loanStatus === "APPROVED" ||
     loanStatus === "RESTART";
 
-  const [step, setStep] = useState(1);
+  /* ✅ STEP FROM PROFILE REDIRECT */
+  const [step, setStep] = useState(() => {
+    return location.state?.step || 1;
+  });
+
   const [showRestartPopup, setShowRestartPopup] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -57,7 +301,6 @@ const LoanApplicationForm = () => {
 
     dispatch(setPhone(savedPhone));
     dispatch(checkLoanStatusThunk(savedPhone));
-
     setFormData((p) => ({ ...p, phone: savedPhone }));
   }, [dispatch]);
 
@@ -76,7 +319,7 @@ const LoanApplicationForm = () => {
     }));
   }, [statusResult]);
 
-  /* ================= STEP CONTROL ================= */
+  /* ================= STEP CONTROL (SAFE) ================= */
   useEffect(() => {
     if (!loanApplied) return;
 
@@ -142,10 +385,8 @@ const LoanApplicationForm = () => {
 
     if (formData.aadhaarFront instanceof File)
       fd.append("aadhaarFront", formData.aadhaarFront);
-
     if (formData.aadhaarBack instanceof File)
       fd.append("aadhaarBack", formData.aadhaarBack);
-
     if (formData.panFile instanceof File)
       fd.append("panFile", formData.panFile);
 
@@ -167,60 +408,59 @@ const LoanApplicationForm = () => {
       <div className="min-h-screen bg-[#f5f6fa] flex justify-center px-3 pt-20">
         <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg">
 
-          <Header /> 
-          <AmountCard amount={formData.amount} /> 
+          <Header />
+          <AmountCard amount={formData.amount} />
           <LoanSteps step={step} />
-<div className="px-4 mt-4">
 
+          <div className="px-4 mt-4">
+            {step === 1 && (
+              <StepOne
+                formData={formData}
+                setFormData={setFormData}
+                sendOtp={sendOtp}
+                sendingOtp={sendingOtp}
+                otpSent={otpSent}
+                otpRefs={otpRefs}
+                handleOtpChange={handleOtpChange}
+                verifyOtp={verifyOtp}
+                verifyingOtp={verifyingOtp}
+              />
+            )}
 
-          {step === 1 && (
-            <StepOne
-              formData={formData}
-              setFormData={setFormData}
-              sendOtp={sendOtp}
-              sendingOtp={sendingOtp}
-              otpSent={otpSent}
-              otpRefs={otpRefs}
-              handleOtpChange={handleOtpChange}
-              verifyOtp={verifyOtp}
-              verifyingOtp={verifyingOtp}
-            />
-          )}
+            {step === 2 && (
+              <StepTwo
+                formData={formData}
+                setFormData={setFormData}
+                onBack={() => setStep(1)}
+                onNext={() => setStep(3)}
+              />
+            )}
 
-          {step === 2 && (
-            <StepTwo
-              formData={formData}
-              setFormData={setFormData}
-              onBack={() => setStep(1)}
-              onNext={() => setStep(3)}
-            />
-          )}
+            {step === 3 && (
+              <StepThree
+                formData={formData}
+                setFormData={setFormData}
+                onBack={() => setStep(2)}
+                onSubmit={submitLoan}
+              />
+            )}
 
-          {step === 3 && (
-            <StepThree
-              formData={formData}
-              setFormData={setFormData}
-              onBack={() => setStep(2)}
-              onSubmit={submitLoan}
-            />
-          )}
+            {step === 4 && loanStatus === "APPROVED" && (
+              <StepFour loanData={statusResult} phone={formData.phone} />
+            )}
 
-          {step === 4 && loanStatus === "APPROVED" && (
-            <StepFour loanData={statusResult} phone={formData.phone} />
-          )}
+            {loading && <p className="text-center text-sm">Processing...</p>}
 
-          {loading && <p className="text-center text-sm">Processing...</p>}
+            {error && loanStatus === "IDLE" && (
+              <p className="text-center text-red-500 text-xs">{error}</p>
+            )}
 
-          {/* 🔥 ERROR ONLY WHEN NO LOAN */}
-          {error && loanStatus === "IDLE" && (
-            <p className="text-center text-red-500 text-xs">{error}</p>
-          )}
-          <Footer />
+            <Footer />
+          </div>
         </div>
+
         <MobileTabs />
         <GlobalStyles />
-      </div>
-
       </div>
 
       <RestartModal
@@ -235,7 +475,6 @@ const LoanApplicationForm = () => {
 };
 
 export default LoanApplicationForm;
-
 
 
 

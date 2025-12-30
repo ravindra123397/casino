@@ -23,10 +23,16 @@
 //       try {
 //         const res = await axiosInstance.get(CHECK_LOAN_STATUS(phone));
 
-//         if (!res.data?.data) {
-//           setError("No loan data found");
-//         } else {
+//         if (res.data?.data) {
 //           setLoanData(res.data.data);
+//         } else {
+//           // 🔄 Restart / Empty loan case
+//           setLoanData({
+//             firstName: "",
+//             lastName: "",
+//             phone,
+//             status: "RESTART",
+//           });
 //         }
 //       } catch (err) {
 //         setError("Failed to load profile");
@@ -56,6 +62,11 @@
 
 //   const isApproved = loanData.status === "APPROVED";
 
+//   const statusText =
+//     loanData.status === "RESTART"
+//       ? "RESTARTED"
+//       : loanData.status;
+
 //   return (
 //     <div className="min-h-screen bg-[#f5f6fa] p-4">
 //       <div className="max-w-md mx-auto space-y-4">
@@ -76,7 +87,7 @@
 //           <div className="flex justify-between items-center">
 //             <div>
 //               <h2 className="text-lg font-bold">
-//                 {loanData.firstName} {loanData.lastName}
+//                 {loanData.firstName || "User"} {loanData.lastName}
 //               </h2>
 //               <p className="text-sm text-gray-500">{loanData.phone}</p>
 //             </div>
@@ -90,48 +101,51 @@
 //               }`}
 //             >
 //               {isApproved ? <CheckCircle size={14} /> : <Clock size={14} />}
-//               {loanData.status}
+//               {statusText}
 //             </div>
 //           </div>
 
 //           <Divider />
 
-//           <ProfileRow label="PAN Number" value={loanData.panNumber} />
-//           <ProfileRow label="UPI ID" value={loanData.upiId} />
-//           <ProfileRow label="Casino Id" value={loanData.bookType} />
-//           <ProfileRow
-//             label="Loan Amount"
-//             value={`₹${loanData.amountRequested.toLocaleString()}`}
-//           />
+//           {loanData.panNumber && (
+//             <ProfileRow label="PAN Number" value={loanData.panNumber} />
+//           )}
+//           {loanData.upiId && (
+//             <ProfileRow label="UPI ID" value={loanData.upiId} />
+//           )}
+//           {loanData.bookType && (
+//             <ProfileRow label="Casino Id" value={loanData.bookType} />
+//           )}
+//           {loanData.amountRequested && (
+//             <ProfileRow
+//               label="Loan Amount"
+//               value={`₹${loanData.amountRequested.toLocaleString()}`}
+//             />
+//           )}
 //         </div>
 
 //         {/* 📂 DOCUMENTS */}
-//         <div className="bg-white rounded-2xl shadow p-5 space-y-3">
-//           <h3 className="font-semibold text-sm text-gray-600">
-//             Uploaded Documents
-//           </h3>
+//         {(loanData.aadhaarFront ||
+//           loanData.aadhaarBack ||
+//           loanData.panFile) && (
+//           <div className="bg-white rounded-2xl shadow p-5 space-y-3">
+//             <h3 className="font-semibold text-sm text-gray-600">
+//               Uploaded Documents
+//             </h3>
 
-//           <div className="grid grid-cols-2 gap-3">
-//             {loanData.aadhaarFront && (
-//               <DocCard
-//                 title="Aadhaar Front"
-//                 src={loanData.aadhaarFront}
-//               />
-//             )}
-//             {loanData.aadhaarBack && (
-//               <DocCard
-//                 title="Aadhaar Back"
-//                 src={loanData.aadhaarBack}
-//               />
-//             )}
-//             {loanData.panFile && (
-//               <DocCard
-//                 title="PAN Card"
-//                 src={loanData.panFile}
-//               />
-//             )}
+//             <div className="grid grid-cols-2 gap-3">
+//               {loanData.aadhaarFront && (
+//                 <DocCard title="Aadhaar Front" src={loanData.aadhaarFront} />
+//               )}
+//               {loanData.aadhaarBack && (
+//                 <DocCard title="Aadhaar Back" src={loanData.aadhaarBack} />
+//               )}
+//               {loanData.panFile && (
+//                 <DocCard title="PAN Card" src={loanData.panFile} />
+//               )}
+//             </div>
 //           </div>
-//         </div>
+//         )}
 
 //         {/* ℹ️ MESSAGE */}
 //         {loanData.userMessage && (
@@ -153,24 +167,17 @@
 //   </div>
 // );
 
-// const Divider = () => (
-//   <div className="h-px bg-gray-200 my-2" />
-// );
+// const Divider = () => <div className="h-px bg-gray-200 my-2" />;
 
 // const DocCard = ({ title, src }) => (
 //   <div className="border rounded-xl overflow-hidden">
-//     <img
-//       src={src}
-//       alt={title}
-//       className="w-full h-32 object-cover"
-//     />
-//     <div className="p-2 text-xs text-center font-semibold">
-//       {title}
-//     </div>
+//     <img src={src} alt={title} className="w-full h-32 object-cover" />
+//     <div className="p-2 text-xs text-center font-semibold">{title}</div>
 //   </div>
 // );
 
 // export default LoanProfile;
+
 
 
 
@@ -202,7 +209,6 @@ const LoanProfile = () => {
         if (res.data?.data) {
           setLoanData(res.data.data);
         } else {
-          // 🔄 Restart / Empty loan case
           setLoanData({
             firstName: "",
             lastName: "",
@@ -222,32 +228,27 @@ const LoanProfile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f5f6fa]">
-        <p className="text-lg font-semibold">Loading profile…</p>
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f5f6fa]">
-        <p className="text-red-500">{error}</p>
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error}
       </div>
     );
   }
 
   const isApproved = loanData.status === "APPROVED";
 
-  const statusText =
-    loanData.status === "RESTART"
-      ? "RESTARTED"
-      : loanData.status;
-
   return (
     <div className="min-h-screen bg-[#f5f6fa] p-4">
       <div className="max-w-md mx-auto space-y-4">
 
-        {/* 🔙 HEADER */}
+        {/* HEADER */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/")}
@@ -258,7 +259,7 @@ const LoanProfile = () => {
           <h1 className="text-xl font-bold">My Profile</h1>
         </div>
 
-        {/* 👤 USER CARD */}
+        {/* USER CARD */}
         <div className="bg-white rounded-2xl shadow p-5 space-y-4">
           <div className="flex justify-between items-center">
             <div>
@@ -268,7 +269,6 @@ const LoanProfile = () => {
               <p className="text-sm text-gray-500">{loanData.phone}</p>
             </div>
 
-            {/* STATUS BADGE */}
             <div
               className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
                 isApproved
@@ -277,7 +277,7 @@ const LoanProfile = () => {
               }`}
             >
               {isApproved ? <CheckCircle size={14} /> : <Clock size={14} />}
-              {statusText}
+              {loanData.status}
             </div>
           </div>
 
@@ -300,7 +300,7 @@ const LoanProfile = () => {
           )}
         </div>
 
-        {/* 📂 DOCUMENTS */}
+        {/* DOCUMENTS */}
         {(loanData.aadhaarFront ||
           loanData.aadhaarBack ||
           loanData.panFile) && (
@@ -323,23 +323,39 @@ const LoanProfile = () => {
           </div>
         )}
 
-        {/* ℹ️ MESSAGE */}
-        {loanData.userMessage && (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-700 text-center">
-            {loanData.userMessage}
-          </div>
-        )}
+        {/* 🔘 ACTION BUTTON */}
+        <div className="mt-4">
+          {loanData.status === "APPROVED" && (
+            <button
+              onClick={() =>
+                navigate("/complete-form", { state: { step: 4 } })
+              }
+              className="w-full bg-green-600 text-white py-3 rounded-xl font-bold"
+            >
+              Go to Loan Details
+            </button>
+          )}
+
+          {loanData.status === "RESTART" && (
+            <button
+              onClick={() =>
+                navigate("/complete-form", { state: { step: 2 } })
+              }
+              className="w-full bg-red-500 text-white py-3 rounded-xl font-bold"
+            >
+              Restart Loan Application
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-/* ---------------- SMALL COMPONENTS ---------------- */
-
 const ProfileRow = ({ label, value }) => (
   <div className="flex justify-between text-sm">
     <span className="text-gray-500">{label}</span>
-    <span className="font-semibold text-gray-800">{value}</span>
+    <span className="font-semibold">{value}</span>
   </div>
 );
 

@@ -76,7 +76,7 @@ const HomePage = () => {
 
           <p>🚀 Fast and smooth disbursal process</p>
 
-          <p>📅 Easy daily / flexible repayment options</p>
+          <p>📅 Easy daily 1% repayment option</p>
 
           <p>📄 No lengthy paperwork or delays</p>
 

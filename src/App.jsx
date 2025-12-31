@@ -13,12 +13,13 @@ import AdminLayout from "./layout/AdminLayout";
 
 import "./App.css";
 import LoanProfile from "./Component/LoanProfile";
+import FirstVisitPopup from "./Component/FirstVisitPopup";
 
 function App() {
   return (
     <>
       <ScrollToTop />
-
+       <FirstVisitPopup />
       <Routes>
         {/* PUBLIC */}
         <Route path="/" element={<HomePage />} />

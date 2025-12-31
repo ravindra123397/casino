@@ -58,8 +58,18 @@ const AdminDashboard = () => {
     setOpenDrawer(true);
   };
 
-  const handleApprove = (id) => {
-    dispatch(approveLoanThunk(id));
+  // const handleApprove = (id) => {
+  //   dispatch(approveLoanThunk(id));
+  // };
+  const handleApprove = async (id) => {
+    const res = await dispatch(approveLoanThunk(id));
+
+    if (res.meta.requestStatus === "fulfilled") {
+      alert("✅ Loan Approved");
+      dispatch(getAllLoansThunk());
+    } else {
+      alert("❌ Approve failed. Check console");
+    }
   };
 
   const openReject = (loanId) => {
@@ -76,23 +86,32 @@ const AdminDashboard = () => {
     );
   };
 
- const confirmReject = () => {
-  if (selectedReasons.length === 0) {
-    alert("Please select at least one reason");
-    return;
-  }
+  const confirmReject = async () => {
+    if (selectedReasons.length === 0) {
+      alert("❌ Please select at least one reason");
+      return;
+    }
 
-  dispatch(
-    restartLoanThunk({
-      loanId: activeLoanId,
-      reasons: selectedReasons,
-    })
-  );
+    const res = await dispatch(
+      restartLoanThunk({
+        loanId: activeLoanId,
+        reasons: selectedReasons,
+      })
+    );
 
-  setOpenRejectDialog(false);
-  setActiveLoanId(null);
-  setSelectedReasons([]);
-};
+    if (res.meta.requestStatus === "fulfilled") {
+      alert("🚫 Loan Rejected / Restarted Successfully");
+      dispatch(getAllLoansThunk());
+    } else {
+      alert("❌ Reject failed. Please try again");
+      console.error("Reject Error:", res);
+    }
+
+    setOpenRejectDialog(false);
+    setActiveLoanId(null);
+    setSelectedReasons([]);
+  };
+
 
 
   if (loading) {
@@ -133,8 +152,8 @@ const AdminDashboard = () => {
                       loan.status === "APPROVED"
                         ? "success"
                         : loan.status === "RESTART"
-                        ? "error"
-                        : "warning"
+                          ? "error"
+                          : "warning"
                     }
                     size="small"
                   />
@@ -153,28 +172,28 @@ const AdminDashboard = () => {
                     {/* APPROVE */}
                     {(loan.status === "PENDING" ||
                       loan.status === "RESTART") && (
-                      <Button
-                        variant="contained"
-                        color="success"
-                        size="small"
-                        onClick={() => handleApprove(loan._id)}
-                      >
-                        Approve
-                      </Button>
-                    )}
+                        <Button
+                          variant="contained"
+                          color="success"
+                          size="small"
+                          onClick={() => handleApprove(loan._id)}
+                        >
+                          Approve
+                        </Button>
+                      )}
 
                     {/* REJECT / RESTART */}
                     {(loan.status === "PENDING" ||
                       loan.status === "APPROVED") && (
-                      <Button
-                        variant="contained"
-                        color="error"
-                        size="small"
-                        onClick={() => openReject(loan._id)}
-                      >
-                        Reject
-                      </Button>
-                    )}
+                        <Button
+                          variant="contained"
+                          color="error"
+                          size="small"
+                          onClick={() => openReject(loan._id)}
+                        >
+                          Reject
+                        </Button>
+                      )}
                   </Stack>
                 </TableCell>
               </TableRow>

@@ -17,11 +17,23 @@ export const getAllLoansThunk = createAsyncThunk(
   }
 );
 
+// export const approveLoanThunk = createAsyncThunk(
+//   "admin/approveLoan",
+//   async (loanId) => {
+//     const res = await axiosInstance.put(APPROVE_LOAN(loanId));
+//     return res.data;
+//   }
+// );
 export const approveLoanThunk = createAsyncThunk(
   "admin/approveLoan",
-  async (loanId) => {
-    const res = await axiosInstance.put(APPROVE_LOAN(loanId));
-    return res.data;
+  async (loanId, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.put(APPROVE_LOAN(loanId));
+      return res.data;
+    } catch (err) {
+      console.error("❌ APPROVE LOAN FAILED", err.response?.data);
+      return rejectWithValue(err.response?.data || "Server error");
+    }
   }
 );
 

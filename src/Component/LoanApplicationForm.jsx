@@ -367,7 +367,7 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
 
       {/* AADHAAR */}
       <FileInput
-        label="Aadhar Front"
+        label="Aadhar Front (Image size: Max 100 KB,PNG)"
         onChange={(e) =>
           setFormData({
             ...formData,
@@ -378,7 +378,7 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
 
 
       <FileInput
-        label="Aadhar Back"
+        label="Aadhar Back (Image size: Max 100 KB,PNG)"
         onChange={(e) =>
           setFormData({
             ...formData,
@@ -407,7 +407,7 @@ const StepTwo = ({ formData, setFormData, onBack, onNext }) => {
 
       {/* PAN FILE */}
       <FileInput
-        label="PAN Upload"
+        label="PAN Upload (Image size: Max 100 KB,PNG) "
         onChange={(e) =>
           setFormData({
             ...formData,

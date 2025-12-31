@@ -545,7 +545,7 @@ const StepFour = ({ loanData, phone }) => {
 
       {/* USER INFO MESSAGE */}
       <div className="mt-4 bg-yellow-50 border border-yellow-300 rounded-xl p-3 text-xs text-center">
-        Processing fee + gst + interest payable in advance . Process the loan
+        Processing fee  + interest payable in advance . Process the loan
       </div>
 
       <button className="mt-5 w-full bg-red-500 text-white py-3 rounded-full font-bold">

@@ -15,16 +15,20 @@ import "./App.css";
 import LoanProfile from "./Component/LoanProfile";
 import FirstVisitPopup from "./Component/FirstVisitPopup";
 
+
 function App() {
   return (
     <>
       <ScrollToTop />
        <FirstVisitPopup />
       <Routes>
+       
         {/* PUBLIC */}
         <Route path="/" element={<HomePage />} />
         <Route path="/complete-form" element={<LoanApplicationfrom />} />
         <Route path="/profile" element={<LoanProfile />} />
+
+       
         {/* AUTH */}
         <Route element={<PublicRoute />}>
           <Route path="/admin/login" element={<Login />} />

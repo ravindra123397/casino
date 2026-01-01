@@ -100,6 +100,7 @@ const HomePage = () => {
 
       {/* MOBILE TABS */}
       <MobileTabs />
+      
     </div>
   );
 };
